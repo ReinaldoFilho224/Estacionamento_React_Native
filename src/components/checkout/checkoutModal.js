@@ -15,16 +15,13 @@ export const CheckoutModal = ({ closeModal, modalVisible, document }) => {
       >
         <View style={stylesCheckout.modalContainer}>
           <View>
-            {/* Conteúdo do modal */}
             <View style={stylesCheckout.modal}>
               <Text>Placa: {document.placa}</Text>
               <Text>Diferença de Tempo: {document.difTime}</Text>
-              {/* Adicione mais informações aqui, conforme necessário */}
               <TouchableOpacity onPress={closeModal}>
                 <Text style={stylesCheckout.modalCloseButton}>Fechar</Text>
               </TouchableOpacity>
             </View>
-            {/* Botão para fechar o modal */}
           </View>
         </View>
       </Modal>
