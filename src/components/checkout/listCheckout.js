@@ -1,15 +1,16 @@
 import { View, Text, TouchableOpacity, Modal } from "react-native"
 import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { stylesCheckout } from "../../../assets/css/checkout";
 import { CheckoutModal } from "./checkoutModal";
 import { db } from "../../config";
+import { useGlobalState  } from "../../config/refresh";
 
 const ListCheckout = () => {
-
     const [park, setPark] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedDocument, setSelectedDocument] = useState(null);
+    const { refresh, setRefresh } = useGlobalState();
 
 
     const openModal = (document) => {
@@ -21,6 +22,16 @@ const ListCheckout = () => {
         setModalVisible(false);
     };
 
+    const invertRefresh = () => {
+        setRefresh(!refresh);
+    };
+
+    function adicionarZero(numero) {
+        if (numero < 10) {
+            return `0${numero}`;
+        }
+        return numero;
+    }
 
     useEffect(() => {
         const fetchDataAndSetTimer = async () => {
@@ -32,21 +43,35 @@ const ListCheckout = () => {
                 }));
 
                 if (estacionamentoData.length > 0) {
-                    const updatedTimes = estacionamentoData.map((documento) => {
+                    const updatedTimes = await Promise.all(estacionamentoData.map(async (documento) => {
                         const horaEntradaEmMilissegundos = documento.hora_entrada.seconds * 1000 + documento.hora_entrada.nanoseconds / 1000000;
                         const horaAtualEmMilissegundos = Date.now();
 
                         const diferencaEmMilissegundos = horaAtualEmMilissegundos - horaEntradaEmMilissegundos;
 
-                        const horas = Math.floor(diferencaEmMilissegundos / (1000 * 60 * 60)); // Calcula as horas
-                        const minutos = Math.floor((diferencaEmMilissegundos % (1000 * 60 * 60)) / (1000 * 60)); // Calcula os minutos
+                        const horas = Math.floor(diferencaEmMilissegundos / (1000 * 60 * 60));
+                        const minutos = Math.floor((diferencaEmMilissegundos % (1000 * 60 * 60)) / (1000 * 60));
+
+                        const clienteSnapshot = await getDoc(doc(db, "clientes", documento.cliente_id));
+                        const clienteData = clienteSnapshot.exists() ? clienteSnapshot.data() : null;
+
+                        const horaEntrada = new Date(horaEntradaEmMilissegundos);
+                        const dia = adicionarZero(horaEntrada.getDate());
+                        const mes = adicionarZero(horaEntrada.getMonth() + 1);
+                        const ano = horaEntrada.getFullYear();
+                        const hora = adicionarZero(horaEntrada.getHours());
+                        const minuto = adicionarZero(horaEntrada.getMinutes());
+                        const segundo = adicionarZero(horaEntrada.getSeconds());
+                        const dataFormatada = `${dia}/${mes}/${ano} ${hora}:${minuto}:${segundo}`;
 
                         return {
                             ...documento,
-                            difTime: `${horas}:${minutos < 10 ? '0' : ''}${minutos} minutos`,
-                            difMin: (diferencaEmMilissegundos / 1000) / 60
+                            difTime: `${horas}h:${minutos < 10 ? '0' : ''}${minutos}m`,
+                            difMin: (diferencaEmMilissegundos / 1000) / 60,
+                            cliente: clienteData,
+                            date: dataFormatada
                         };
-                    });
+                    }));
 
                     setPark(updatedTimes);
                 } else {
@@ -62,7 +87,7 @@ const ListCheckout = () => {
         const timer = setInterval(fetchDataAndSetTimer, 60000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, [refresh]);
 
     return (
         <View style={stylesCheckout.checkoutDiv}>
@@ -81,7 +106,7 @@ const ListCheckout = () => {
                     </TouchableOpacity>
                 </View>
             ))}
-            <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} />
+            <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh}/>
         </View>
     )
 }
