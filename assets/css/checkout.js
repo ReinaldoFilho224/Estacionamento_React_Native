@@ -35,4 +35,18 @@ export const stylesCheckout = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold"
     },
+    divModal:{
+        display: 'flex',
+        justifyContent: 'center',
+        alignContent: 'center',
+    },
+    modalContainer: {
+        backgroundColor: '#fff',
+        alignItems:'center' ,
+        height: '100%',
+    },
+    modal:{
+        height: '100%',
+        width: '100%',
+    },
   });

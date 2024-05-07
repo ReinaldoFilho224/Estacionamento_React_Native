@@ -1,4 +1,4 @@
-import ListCheckout from "../components/listCheckout";
+import ListCheckout from "../components/checkout/listCheckout";
 import { stylesCheckout } from "../../assets/css/checkout";
 import { View } from "react-native";
 

@@ -1,12 +1,26 @@
-import { View, Text, TouchableOpacity } from "react-native"
+import { View, Text, TouchableOpacity, Modal } from "react-native"
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { stylesCheckout } from "../../assets/css/checkout";
-import { db } from "../config";
+import { stylesCheckout } from "../../../assets/css/checkout";
+import { CheckoutModal } from "./checkoutModal";
+import { db } from "../../config";
 
 const ListCheckout = () => {
 
     const [park, setPark] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedDocument, setSelectedDocument] = useState(null);
+
+
+    const openModal = (document) => {
+        setSelectedDocument(document);
+        setModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setModalVisible(false);
+    };
+
 
     useEffect(() => {
         const fetchDataAndSetTimer = async () => {
@@ -30,7 +44,7 @@ const ListCheckout = () => {
                         return {
                             ...documento,
                             difTime: `${horas}:${minutos < 10 ? '0' : ''}${minutos} minutos`,
-                            difMin: (diferencaEmMilissegundos/1000)/60
+                            difMin: (diferencaEmMilissegundos / 1000) / 60
                         };
                     });
 
@@ -50,23 +64,25 @@ const ListCheckout = () => {
         return () => clearInterval(timer);
     }, []);
 
-
-
     return (
         <View style={stylesCheckout.checkoutDiv}>
-        {park.map((car, index) => (
-            <View key={index} style={stylesCheckout.checkoutItem}>
-                <Text style={stylesCheckout.text}>
-                    {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                </Text>
-                <TouchableOpacity style={stylesCheckout.button}>
-                    <Text style={stylesCheckout.textButton}>
-                        Pagar
+            {park.map((car, index) => (
+                <View key={index} style={stylesCheckout.checkoutItem}>
+                    <Text style={stylesCheckout.text}>
+                        {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </Text>
-                </TouchableOpacity>
-            </View>
-        ))}
-    </View>
+                    <TouchableOpacity
+                        style={stylesCheckout.button}
+                        onPress={() => openModal(car)}
+                    >
+                        <Text style={stylesCheckout.textButton}>
+                            Pagar
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            ))}
+            <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} />
+        </View>
     )
 }
 
