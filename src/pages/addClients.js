@@ -1,8 +1,7 @@
-import React from "react";
-import { Text, View } from "react-native";
+import { View, Text } from "react-native";
 import { styles } from "../../assets/css/home";
 
-const Home = () => {
+const AddClients = () => {
     return (
         <View style={styles.container}>
             <View>
@@ -22,4 +21,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default AddClients;

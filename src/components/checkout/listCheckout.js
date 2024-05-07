@@ -1,10 +1,10 @@
-import { View, Text, TouchableOpacity, Modal } from "react-native"
+import { View, Text, TouchableOpacity, ScrollView } from "react-native"
 import { useState, useEffect } from "react";
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { stylesCheckout } from "../../../assets/css/checkout";
 import { CheckoutModal } from "./checkoutModal";
 import { db } from "../../config";
-import { useGlobalState  } from "../../config/refresh";
+import { useGlobalState } from "../../config/refresh";
 
 const ListCheckout = () => {
     const [park, setPark] = useState([]);
@@ -90,24 +90,26 @@ const ListCheckout = () => {
     }, [refresh]);
 
     return (
-        <View style={stylesCheckout.checkoutDiv}>
-            {park.map((car, index) => (
-                <View key={index} style={stylesCheckout.checkoutItem}>
-                    <Text style={stylesCheckout.text}>
-                        {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                    </Text>
-                    <TouchableOpacity
-                        style={stylesCheckout.button}
-                        onPress={() => openModal(car)}
-                    >
-                        <Text style={stylesCheckout.textButton}>
-                            Pagar
+        <ScrollView>
+            <View style={stylesCheckout.checkoutDiv}>
+                {park.map((car, index) => (
+                    <View key={index} style={stylesCheckout.checkoutItem}>
+                        <Text style={stylesCheckout.text}>
+                            {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                         </Text>
-                    </TouchableOpacity>
-                </View>
-            ))}
-            <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh}/>
-        </View>
+                        <TouchableOpacity
+                            style={stylesCheckout.button}
+                            onPress={() => openModal(car)}
+                        >
+                            <Text style={stylesCheckout.textButton}>
+                                Pagar
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                ))}
+                <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh} />
+            </View>
+        </ScrollView>
     )
 }
 

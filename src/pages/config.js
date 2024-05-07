@@ -1,8 +1,8 @@
-import {Text} from "react-native"
+import ConfigComponent from "../components/config/configcomponent";
 
 const Config = () => {
   return(
-    <Text>Configuração</Text>
+    <ConfigComponent />
   );
 }
 

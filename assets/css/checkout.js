@@ -8,7 +8,7 @@ export const stylesCheckout = StyleSheet.create({
     checkoutDiv: {
         display: 'flex',
         gap: 8,
-        marginTop: 8,
+        marginVertical: 8,
         marginHorizontal: 8,
     },
     checkoutItem: {
