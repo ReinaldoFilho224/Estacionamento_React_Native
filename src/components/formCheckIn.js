@@ -30,13 +30,11 @@ const CheckInForm = ({ onCheckIn }) => {
     const handleCheckIn = () => {
         const horaEntrada = new Date();
 
-        // Verificar se precoHora está definido corretamente
         if (precoHora === undefined || precoHora === null) {
             console.error("precoHora não está definido corretamente");
             return;
         }
 
-        // Substitua com a lógica para enviar os dados do formulário
         const formData = {
             clienteId: selectedClienteId,
             horaEntrada,
