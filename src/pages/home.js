@@ -6,7 +6,6 @@ const Home = () => {
     return (
         <View style={styles.container}>
             <View>
-                {/* Seu conteúdo aqui */}
             </View>
             <View>
                 {/* Saldo */}
