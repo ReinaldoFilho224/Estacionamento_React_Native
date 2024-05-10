@@ -92,9 +92,10 @@ const ListCheckout = () => {
     return (
         <ScrollView>
             <View style={stylesCheckout.checkoutDiv}>
-                {park.map((car, index) => (
+
+                {park.length > 0? park.map((car, index) => (
                     <View key={index} style={stylesCheckout.checkoutItem}>
-                        <Text style={stylesCheckout.text}>
+                        <Text style={stylesCheckout.textItem}>
                             {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                         </Text>
                         <TouchableOpacity
@@ -106,7 +107,11 @@ const ListCheckout = () => {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                ))}
+                )):
+                    <View style={stylesCheckout.textView}>
+                        <Text style={stylesCheckout.text}>Nenhum veículo estacionado</Text>
+                    </View>
+                }
                 <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh} />
             </View>
         </ScrollView>
