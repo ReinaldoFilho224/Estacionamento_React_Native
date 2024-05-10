@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { collection, addDoc } from 'firebase/firestore';
+import { useGlobalState } from '../../config/refresh';
 import { db } from '../../config';
 import { stylesConfigs } from '../../../assets/css/config';
 
@@ -8,6 +9,7 @@ const AddClientsComponent = () => {
     const [cpf, setCpf] = useState('');
     const [nome, setNome] = useState('');
     const [telefone, setTelefone] = useState('');
+    const {refresh, setRefresh} = useGlobalState();
 
     const handleCreateClient = async () => {
         try {
@@ -23,6 +25,8 @@ const AddClientsComponent = () => {
             setCpf('');
             setNome('');
             setTelefone('');
+            setRefresh(!refresh)
+            
 
             Alert.alert('Sucesso', 'Cliente criado com sucesso!');
         } catch (error) {

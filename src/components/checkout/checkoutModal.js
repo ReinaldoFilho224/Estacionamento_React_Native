@@ -1,5 +1,5 @@
 import { collection, addDoc, Timestamp, deleteDoc, doc } from "firebase/firestore";
-import { View, Text, Modal, TouchableOpacity } from "react-native"
+import { View, Text, Modal, TouchableOpacity, ScrollView } from "react-native"
 import { stylesCheckout } from "../../../assets/css/checkout"
 import { db } from "../../config";
 
@@ -33,7 +33,7 @@ const VeiculoTab = ({ veiculo }) => (
   </View>
 );
 
-export const CheckoutModal = ({ closeModal, modalVisible, setRefresh , document }) => {
+export const CheckoutModal = ({ closeModal, modalVisible, setRefresh, document }) => {
   if (!document) {
     return null;
   }
@@ -69,7 +69,6 @@ export const CheckoutModal = ({ closeModal, modalVisible, setRefresh , document 
     }
   }
 
-
   return (
     <Modal
       animationType="slide"
@@ -77,24 +76,25 @@ export const CheckoutModal = ({ closeModal, modalVisible, setRefresh , document 
       visible={modalVisible}
       onRequestClose={closeModal}
     >
-      <View style={stylesCheckout.modalContainer}>
-        <View style={stylesCheckout.modal}>
-          <Text style={stylesCheckout.modalTitle}>Realizar Pagamento</Text>
-          <ClienteTab cliente={document.cliente} />
-          <VeiculoTab veiculo={document} />
-          <View>
-            <Text style={stylesCheckout.modalTabTitle}>Total a Pagar: {((document.preco_hora / 60) * document.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+      <ScrollView>
+        <View style={stylesCheckout.modalContainer}>
+          <View style={stylesCheckout.modal}>
+            <Text style={stylesCheckout.modalTitle}>Realizar Pagamento</Text>
+            <ClienteTab cliente={document.cliente} />
+            <VeiculoTab veiculo={document} />
+            <View>
+              <Text style={stylesCheckout.modalTabTitle}>Total a Pagar: {((document.preco_hora / 60) * document.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+            </View>
+            <TouchableOpacity onPress={() => executeCheckout()} style={stylesCheckout.modalCheckoutButton}>
+              <Text style={stylesCheckout.modalCloseButtonText}> Fazer Checkout</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={closeModal} style={stylesCheckout.modalCloseButton}>
+              <Text style={stylesCheckout.modalCloseButtonText}>Fechar</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => executeCheckout()} style={stylesCheckout.modalCheckoutButton}>
-            <Text style={stylesCheckout.modalCloseButtonText}> Fazer Checkout</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={closeModal} style={stylesCheckout.modalCloseButton}>
-            <Text style={stylesCheckout.modalCloseButtonText}>Fechar</Text>
-          </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </Modal>
-
   );
 };
 
