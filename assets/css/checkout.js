@@ -26,7 +26,7 @@ export const stylesCheckout = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
     },
-    text: {
+    textItem: {
         fontSize: 16,
         fontWeight: "bold"
     },
@@ -34,6 +34,16 @@ export const stylesCheckout = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: "bold"
+    },
+    textView: {
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign:'center'
+    },
+    text: {
+        color: '#fff',
+        fontSize: 16,
     },
     modalContainer: {
         flex: 1,
