@@ -11,7 +11,7 @@ export const stylesCheckin = StyleSheet.create({
     },
     TitleCheckin:{
         color:'#fff',
-        fontSize:'1.5rem',
+        fontSize: 26,
         padding:'1.5rem'
     },
     CheckinPage:{
