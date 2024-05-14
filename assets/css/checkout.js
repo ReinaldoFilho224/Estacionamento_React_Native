@@ -50,6 +50,7 @@ export const stylesCheckout = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        height:'100%',
       },
       modal: {
         width: '80%',
