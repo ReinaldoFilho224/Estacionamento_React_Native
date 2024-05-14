@@ -76,9 +76,9 @@ export const CheckoutModal = ({ closeModal, modalVisible, setRefresh, document }
       visible={modalVisible}
       onRequestClose={closeModal}
     >
-      <ScrollView>
-        <View style={stylesCheckout.modalContainer}>
-          <View style={stylesCheckout.modal}>
+      <View style={stylesCheckout.modalContainer}>
+        <View style={stylesCheckout.modal}>
+          <ScrollView>
             <Text style={stylesCheckout.modalTitle}>Realizar Pagamento</Text>
             <ClienteTab cliente={document.cliente} />
             <VeiculoTab veiculo={document} />
@@ -91,9 +91,9 @@ export const CheckoutModal = ({ closeModal, modalVisible, setRefresh, document }
             <TouchableOpacity onPress={closeModal} style={stylesCheckout.modalCloseButton}>
               <Text style={stylesCheckout.modalCloseButtonText}>Fechar</Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </Modal>
   );
 };
