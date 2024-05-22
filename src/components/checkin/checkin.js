@@ -1,11 +1,10 @@
 import React from "react";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from '../config/index'
-import CheckInForm from "../components/formCheckIn";
-import { useGlobalState } from "../config/refresh";
+import { db } from '../../config/index'
+import CheckInForm from "./formCheckIn";
+import { useGlobalState } from "../../config/refresh";
 import { View } from "react-native";
-import { stylesCheckin } from "../../assets/css/checkin";
-
+import { stylesCheckin } from "../../../assets/css/checkin";
 
 const CheckInPage = () => {
   const { refresh, setRefresh } = useGlobalState();
@@ -28,9 +27,7 @@ const CheckInPage = () => {
   };
 
   return (
-    <View style={stylesCheckin.CheckinPage}>
       <CheckInForm onCheckIn={handleCheckIn} />
-    </View>
   );
 };
 

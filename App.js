@@ -1,9 +1,7 @@
-// App.js
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CheckInPage from './src/pages/checkin';
-import Checkout from './src/pages/checkout';
+import CheckInPage from './src/components/checkin/checkin';
 import Home from './src/pages/home';
 import Config from './src/pages/config';
 import LoginScreen from './src/components/auth/login';
@@ -12,6 +10,7 @@ import { GlobalStateProvider } from './src/config/refresh';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auth } from './src/config';
 import { onAuthStateChanged } from 'firebase/auth';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,32 +38,36 @@ const App = () => {
 
   return (
     <GlobalStateProvider>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-              if (route.name === 'E-Park Manager') {
-                iconName = focused ? 'home' : 'home-outline';
-              } else if (route.name === 'Checkin') {
-                iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
-              } else if (route.name === 'Checkout') {
-                iconName = focused ? 'cart' : 'cart-outline';
-              } else if (route.name === 'Configuração') {
-                iconName = focused ? 'settings' : 'settings-outline';
-              }
+                if (route.name === 'E-Park Manager') {
+                  iconName = focused ? 'home' : 'home-outline';
+                } else if (route.name === 'Checkin') {
+                  iconName = focused ? 'checkmark-circle' : 'checkmark-circle-outline';
+                } else if (route.name === 'Checkout') {
+                  iconName = focused ? 'cart' : 'cart-outline';
+                } else if (route.name === 'Configuração') {
+                  iconName = focused ? 'settings' : 'settings-outline';
+                }
 
-              return <Icon name={iconName} size={size} color={color} />;
-            },
-          })}
-        >
-          <Tab.Screen name="E-Park Manager" component={Home} />
-          <Tab.Screen name="Checkin" component={CheckInPage} />
-          <Tab.Screen name="Checkout" component={Checkout} />
-          <Tab.Screen name="Configuração" component={Config} />
-        </Tab.Navigator>
-      </NavigationContainer>
+                return <Icon name={iconName} size={size} color={color} />;
+              },
+              // tabBarStyle: { display: 'none' },
+              headerShown: false, 
+            })}
+          >
+            <Tab.Screen name="Checkin" component={Config} />
+            <Tab.Screen name="E-Park Manager" component={Home} />
+            {/* <Tab.Screen name="Checkout" component={Checkout} /> */}
+            <Tab.Screen name="Configuração" component={Config} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </GestureHandlerRootView>
     </GlobalStateProvider>
   );
 };
