@@ -6,6 +6,7 @@ export const stylesCheckout = StyleSheet.create({
         backgroundColor: '#5b85c9'
     },
     checkoutDiv: {
+        backgroundColor:'#eaeaea',
         display: 'flex',
         gap: 8,
         marginVertical: 8,
