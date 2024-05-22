@@ -1,16 +1,42 @@
-import React from 'react';
+// App.js
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CheckInPage from './src/pages/checkin';
 import Checkout from './src/pages/checkout';
 import Home from './src/pages/home';
 import Config from './src/pages/config';
+import LoginScreen from './src/components/auth/login';
+import RegisterScreen from './src/components/auth/register';
 import { GlobalStateProvider } from './src/config/refresh';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { auth } from './src/config';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (!user) {
+    return (
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen name="Login" component={LoginScreen} />
+          <Tab.Screen name="Registro" component={RegisterScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
+  }
+
   return (
     <GlobalStateProvider>
       <NavigationContainer>
@@ -29,7 +55,6 @@ const App = () => {
                 iconName = focused ? 'settings' : 'settings-outline';
               }
 
-              // Retorne o ícone com o nome e tamanho apropriados
               return <Icon name={iconName} size={size} color={color} />;
             },
           })}
