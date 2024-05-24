@@ -1,49 +1,55 @@
 import { StyleSheet } from 'react-native';
 
 export const stylesCheckin = StyleSheet.create({
-    input:{
-        backgroundColor:'#FFF',
-        width:'100%',
-        padding:8,
-        borderRadius: 6,
-        display:'flex',
-        justifyContent: 'center',
+    input: {
+        backgroundColor: '#FFF',
+        width: '80%', 
+        padding: 12, 
+        borderRadius: 10, 
+        marginBottom: 10, 
     },
-    TitleCheckin:{
-        // color:'#fff',
+    TitleCheckin: {
+        color: '#fff',
         fontSize: 26,
-        padding:'1.5rem'
+        marginBottom: 20, 
     },
-    CheckinPage:{
-        // backgroundColor: '#5b85c9',
-        // width:'100%',
-        // height:'100%',
-        // display:'flex',
-        // justifyContent: 'center',
-        // alignItems:'center',
-        // gap: 5,
+    CheckinPage: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#D0AA56', 
+        backgroundImage: 'linear-gradient(45deg, #D0AA56, #000)', 
     },
-    inputArea:{
-        // backgroundColor: '#5b85c9',
-        width:'80%',
-        height:'100%',
-        // display:'flex',
-        // justifyContent: 'center',
-        alignItems:'center',
-        gap: 5,
+
+    inputArea: {
+        width: '80%',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundImage: 'linear-gradient(45deg, rgba(208, 170, 86, 0.5), rgba(0, 0, 0, 0.5))',  
+        borderRadius: 40,
+        position: 'relative',  
     },
     modal: {
-        height: '100%',
-        flex:1,
-        backgroundColor: '#5b85c9',
-        padding: 20,
+        backgroundColor: '#FFF', 
+        width: '80%',
         borderRadius: 10,
+        padding: 20,
         alignItems: 'center',
-      },
-      buttonsArea:{
-        display: 'flex',
+    },
+    buttonsArea: {
         flexDirection: 'row',
-        gap:5,
-        padding: '1rem'
-      }
-})
+        marginTop: 20, 
+    },
+    button: {
+        backgroundColor: '#5b85c9',
+        padding: 10,
+        borderRadius: 8,
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 16,
+    },
+});
