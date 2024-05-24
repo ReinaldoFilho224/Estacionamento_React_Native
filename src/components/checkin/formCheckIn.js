@@ -2,18 +2,16 @@ import React, { useState, useEffect } from "react";
 import { View, Button, TextInput, Text, Modal, TouchableOpacity} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { collection, getDocs } from "firebase/firestore";
-import { useGlobalState } from "../config/refresh";
-import { db } from "../config";
+import { useGlobalState } from "../../config/refresh";
+import { db } from "../../config";
 import { MaskedTextInput } from "react-native-mask-text";
-import { stylesCheckin } from "../../assets/css/checkin";
-import AddClientsComponent from "./config/addClientsModal";
+import { stylesCheckin } from "../../../assets/css/checkin";
 
 const CheckInForm = ({ onCheckIn }) => {
     const [clientes, setClientes] = useState([]);
     const [selectedClienteId, setSelectedClienteId] = useState("");
     const [placa, setPlaca] = useState("");
     const [precoHora, setPrecoHora] = useState("");
-    const [modalVisible, setModalVisible] = useState(false);
     const { refresh } = useGlobalState();
 
     useEffect(() => {
@@ -33,9 +31,6 @@ const CheckInForm = ({ onCheckIn }) => {
         fetchClientes();
     }, [refresh]);
 
-    const invertCheckin = () => {
-        setModalVisible(!modalVisible)
-    }
 
     const handleCheckIn = () => {
         const horaEntrada = new Date();
@@ -64,7 +59,6 @@ const CheckInForm = ({ onCheckIn }) => {
     };
     return (
         <View style={stylesCheckin.inputArea}>
-            <Text style={stylesCheckin.TitleCheckin}>Realizar Check-in</Text>
             <Picker
                 selectedValue={selectedClienteId}
                 onValueChange={(itemValue) => setSelectedClienteId(itemValue)}
@@ -95,21 +89,7 @@ const CheckInForm = ({ onCheckIn }) => {
             />
             <View style={stylesCheckin.buttonsArea}>
                 <Button title="Check-In" onPress={handleCheckIn} />
-                <Button title="Novo Cliente" onPress={invertCheckin} />
             </View>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={stylesCheckin.modal}>
-                    <AddClientsComponent />
-                    <TouchableOpacity onPress={() => setModalVisible(false)}>
-                        <Text>Fechar</Text>
-                    </TouchableOpacity>
-                </View>
-            </Modal>
         </View>
     );
 };

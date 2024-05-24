@@ -22,14 +22,6 @@ export const stylesCheckin = StyleSheet.create({
         backgroundImage: 'linear-gradient(45deg, #D0AA56, #000)', 
     },
 
-    icon: {
-        position: 'absolute', // Define a posição absoluta para o ícone
-        top: 10, // Ajuste a posição vertical conforme necessário
-        right: 10, // Ajuste a posição horizontal conforme necessário
-        width: 20, // Ajuste o tamanho do ícone conforme necessário
-        height: 20, // Ajuste o tamanho do ícone conforme necessário
-    },
-
     inputArea: {
         width: '80%',
         flex: 1,

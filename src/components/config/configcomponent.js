@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, Button } from 'react-native';
 import { List } from 'react-native-paper';
 import ViewClientsComponent from './viewClientsModal';
 import AddClientsComponent from './addClientsModal';
 import ParkModalComponent from './parkModal';
 import HistoricComponent from './historicModal';
 import { stylesConfigs } from '../../../assets/css/config';
+import { auth } from '../../config';
 
 const Menu = [
   'Historico',
@@ -17,7 +18,17 @@ const Menu = [
 const ConfigComponent = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState(null);
-  const [expanded, setExpanded] = useState(-1); 
+  const [expanded, setExpanded] = useState(-1);
+
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        console.log('Usuário desconectado');
+      })
+      .catch((error) => {
+        console.error('Erro ao desconectar usuário:', error);
+      });
+  };
 
   const handleMenuItemPress = (item) => {
     switch (item) {
@@ -81,6 +92,10 @@ const ConfigComponent = () => {
           )}
         </TouchableOpacity>
       ))}
+
+      <View>
+        <Button title="Sair" onPress={handleLogout} />
+      </View>
 
       <Modal
         animationType="slide"

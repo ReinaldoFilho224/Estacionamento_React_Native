@@ -5,11 +5,13 @@ import { stylesCheckout } from "../../../assets/css/checkout";
 import { CheckoutModal } from "./checkoutModal";
 import { db } from "../../config";
 import { useGlobalState } from "../../config/refresh";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const ListCheckout = () => {
     const [park, setPark] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedDocument, setSelectedDocument] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const { refresh, setRefresh } = useGlobalState();
 
 
@@ -36,6 +38,7 @@ const ListCheckout = () => {
     useEffect(() => {
         const fetchDataAndSetTimer = async () => {
             try {
+                setIsLoading(true);
                 const querySnapshot = await getDocs(collection(db, "estacionamento"));
                 const estacionamentoData = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
@@ -79,6 +82,8 @@ const ListCheckout = () => {
                 }
             } catch (error) {
                 console.error("Erro ao buscar carros estacionados:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -91,29 +96,37 @@ const ListCheckout = () => {
 
     return (
         <ScrollView>
-            <View style={stylesCheckout.checkoutDiv}>
-
-                {park.length > 0? park.map((car, index) => (
-                    <View key={index} style={stylesCheckout.checkoutItem}>
-                        <Text style={stylesCheckout.textItem}>
-                            {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                        </Text>
-                        <TouchableOpacity
-                            style={stylesCheckout.button}
-                            onPress={() => openModal(car)}
-                        >
-                            <Text style={stylesCheckout.textButton}>
-                                Pagar
+            {isLoading ? (
+                <Spinner
+                visible={isLoading}
+                textContent={'Carregando...'}
+                textStyle={{ color: '#FFF' }}
+                overlayColor={'rgba(0, 0, 0, 0.7)'}
+            />
+            ) : (
+                <View style={stylesCheckout.checkoutView}>
+                    {park.length > 0 ? park.map((car, index) => (
+                        <View key={index} style={stylesCheckout.checkoutItem}>
+                            <Text style={stylesCheckout.textItem}>
+                                {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </Text>
-                        </TouchableOpacity>
-                    </View>
-                )):
-                    <View style={stylesCheckout.textView}>
-                        <Text style={stylesCheckout.text}>Nenhum veículo estacionado</Text>
-                    </View>
-                }
-                <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh} />
-            </View>
+                            <TouchableOpacity
+                                style={stylesCheckout.button}
+                                onPress={() => openModal(car)}
+                            >
+                                <Text style={stylesCheckout.textButton}>
+                                    Pagar
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    )) :
+                        <View style={stylesCheckout.textView}>
+                            <Text style={stylesCheckout.text}>Nenhum veículo estacionado</Text>
+                        </View>
+                    }
+                    <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh} />
+                </View>
+            )}
         </ScrollView>
     )
 }
