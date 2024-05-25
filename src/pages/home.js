@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native"; 
 import Modal from 'react-native-modal';
 import { styles } from "../../assets/css/home";
-import ButtonMenu  from "../components/home/buttonsMenu";
+import ButtonMenu from "../components/home/buttonsMenu";
 import CheckInPage from "../components/checkin/checkin";
 import ListCheckout from "../components/checkout/listCheckout";
 import AddClientsComponent from "../components/config/addClientsModal";
@@ -40,24 +40,31 @@ const Home = () => {
     return (
         <View style={styles.container}>
             <View style={styles.subContainer}>
-                <Text>Vagas Livres: 100</Text>
-                <Text>Valor da Hora: R$ 8,00</Text>
+                <View style={styles.textContainerWrapper}>
+                    <View style={styles.textContainer}>
+                        <Text>Vagas Livres: 100</Text>
+                    </View>
+                </View>
+                <View style={styles.textContainerWrapper}>
+                    <View style={styles.textContainer}>
+                        <Text>Valor da Hora: R$ 8,00</Text>
+                    </View>
+                </View>
             </View>
             <View style={styles.lineMenu}>
                 <View style={styles.menuArea}>
-                <ButtonMenu
-                        functionModal={handleCheckin}
-                        icon="checkmark-circle-outline"
-                        iconColor="green"
-                        textButton="Realizar Checkin"
-                    />
-
-                    <ButtonMenu
-                        functionModal={handleCheckout}
-                        icon="log-out-outline"
-                        iconColor="red"
-                        textButton="Realizar Checkout"
-                    />
+                    <TouchableOpacity style={styles.buttonMenu} onPress={handleCheckin}>
+                        <View style={styles.buttonMenuIcons}>
+                            <Icon name="checkmark-circle-outline" size={30} color="green" />
+                            <Text style={styles.buttonText}>Realizar Checkin</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonMenu} onPress={handleCheckout}>
+                        <View style={styles.buttonMenuIcons}>
+                            <Icon name="log-out-outline" size={30} color="red" />
+                            <Text style={styles.buttonText}>Realizar Checkout</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
             <Modal
@@ -67,29 +74,23 @@ const Home = () => {
             >
                 <View style={styles.modalContent}>
                     <View style={styles.headerModal}>
-                        <TouchableOpacity onPress={modalContent === "addClient" ?
-                            () => handleCheckin()
-                            :
-                            () => setModalVisible(false)}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)}>
                             <Text style={styles.buttonClose}>
                                 <Icon name="chevron-back-outline" size={30} color="#000" />
                             </Text>
                         </TouchableOpacity>
-                        <Text style={styles.text}>
+                        <Text style={styles.modalHeaderText}>
                             {modalContent === "checkin" ?
                                 'Realizar Checkin' :
                                 modalContent === "checkout" ?
                                     'Realizar Checkout' :
                                     'Adicionar Cliente'}
                         </Text>
-                        <View>
-                            {modalContent === "checkin" ?
-                                <TouchableOpacity onPress={() => handleAddClient()}>
-                                    <Icon name="person-add-outline" size={30} color="#000" />
-                                </TouchableOpacity>
-                                :
-                                <></>}
-                        </View>
+                        {modalContent === "checkin" &&
+                            <TouchableOpacity onPress={handleAddClient}>
+                                <Icon name="person-add-outline" size={30} color="#000" />
+                            </TouchableOpacity>
+                        }
                     </View>
                     {renderModalContent()}
                 </View>
