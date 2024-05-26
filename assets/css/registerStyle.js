@@ -1,37 +1,37 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 const registerStyle = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF', 
-    paddingHorizontal: 20, 
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 20,
   },
   input: {
-    backgroundColor: '#F2F2F2', 
-    width: '100%', 
+    backgroundColor: "#F2F2F2",
+    width: "100%",
     height: 40,
-    marginBottom: 10, 
-    paddingHorizontal: 15, 
-    borderRadius: 10, 
+    marginBottom: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#CCCCCC', 
+    borderColor: "#CCCCCC",
   },
   button: {
-    width: '100%', 
+    width: "100%",
     height: 40,
-    backgroundColor: '#007bff', 
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#007bff",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10,
   },
   buttonText: {
-    color: '#FFFFFF', 
+    color: "#FFFFFF",
     fontSize: 16,
   },
   errorText: {
-    color: 'red', 
+    color: "red",
     marginTop: 10,
   },
 });
