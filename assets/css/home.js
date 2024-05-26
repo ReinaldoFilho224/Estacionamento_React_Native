@@ -1,69 +1,76 @@
 import { StyleSheet } from 'react-native';
 
-
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#eaeaea',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
     flex: 1,
+    backgroundColor: '#eaeaea',
   },
   subContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#5b85c9',
+    backgroundColor: '#1E829D',
+    padding: 50,
+  },
+  textContainerWrapper: {
+    flex: 1,
+    marginHorizontal: 5,
+  },
+  textContainer: {
+    backgroundColor: '#fff',
     padding: 10,
-    height: '30%',
+    borderRadius: 10,
+    alignItems: 'center',
+    margin: 10,
   },
   lineMenu: {
     width: '100%',
     height: 200,
-    padding: 10
+    padding: 10,
   },
   menuArea: {
     width: '100%',
-    height: '80%',
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 12
+    gap: 12,
   },
   buttonMenu: {
     padding: 10,
     backgroundColor: '#fff',
     width: '48%',
     height: '100%',
-    
   },
-  buttonMenuIcons:{
+  buttonMenuIcons: {
     width: '100%',
     height: '100%',
-    display:'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent:'center',
-    gap:10
+    justifyContent: 'center',
+    gap: 10,
+  },
+  buttonText: {
+    fontSize: 16,
+    textAlign: 'center',
   },
   buttonClose: {
-    color:'#fff'
+    color: '#fff',
   },
   modalContent: {
     backgroundColor: '#fff',
     height: '100%',
     padding: 20,
   },
-  text:{
+  modalHeaderText: {
     fontSize: 20,
     textAlign: 'center',
+    marginBottom: 10,
   },
-  headerModal:{
-    display:'grid',
-    flexDirection:'row',
+  headerModal: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:'center',
+    alignItems: 'center',
   },
-  textIcons:{
-    fontSize:18,
-  }
+  textIcons: {
+    fontSize: 18,
+  },
 });
