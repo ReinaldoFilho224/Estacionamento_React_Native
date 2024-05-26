@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { List } from 'react-native-paper';
@@ -6,31 +7,57 @@ import AddClientsComponent from './addClientsModal';
 import ParkModalComponent from './parkModal';
 import HistoricComponent from './historicModal';
 import { stylesConfigs } from '../../../assets/css/config';
+=======
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Modal, Button } from "react-native";
+import { List } from "react-native-paper";
+import ViewClientsComponent from "./viewClientsModal";
+import AddClientsComponent from "./addClientsModal";
+import ParkModalComponent from "./parkModal";
+import HistoricComponent from "./historicModal";
+import { stylesConfigs } from "../../../assets/css/config";
+import { auth } from "../../config";
+>>>>>>> Stashed changes
 
 const Menu = [
-  'Historico',
-  'Estacionamento',
-  'Saldo',
-  { 'Cliente': ['Ver Clientes', 'Adicionar Clientes'] },
+  "Historico",
+  "Estacionamento",
+  "Saldo",
+  { Cliente: ["Ver Clientes", "Adicionar Clientes"] },
 ];
 
 const ConfigComponent = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+<<<<<<< Updated upstream
   const [expanded, setExpanded] = useState(-1); 
+=======
+  const [expanded, setExpanded] = useState(-1);
+
+  const handleLogout = () => {
+    auth
+      .signOut()
+      .then(() => {
+        console.log("Usuário desconectado");
+      })
+      .catch((error) => {
+        console.error("Erro ao desconectar usuário:", error);
+      });
+  };
+>>>>>>> Stashed changes
 
   const handleMenuItemPress = (item) => {
     switch (item) {
-      case 'Ver Clientes':
+      case "Ver Clientes":
         setModalContent(<ViewClientsComponent />);
         break;
-      case 'Adicionar Clientes':
+      case "Adicionar Clientes":
         setModalContent(<AddClientsComponent />);
         break;
-      case 'Historico':
+      case "Historico":
         setModalContent(<HistoricComponent />);
         break;
-      case 'Estacionamento':
+      case "Estacionamento":
         setModalContent(<ParkModalComponent />);
         break;
       default:
@@ -43,10 +70,10 @@ const ConfigComponent = () => {
 
   const handleSubMenuItemPress = (subItem) => {
     switch (subItem) {
-      case 'Ver Clientes':
+      case "Ver Clientes":
         setModalContent(<ViewClientsComponent />);
         break;
-      case 'Adicionar Clientes':
+      case "Adicionar Clientes":
         setModalContent(<AddClientsComponent />);
         break;
       default:
@@ -61,7 +88,7 @@ const ConfigComponent = () => {
     <View>
       {Menu.map((item, index) => (
         <TouchableOpacity key={index} onPress={() => handleMenuItemPress(item)}>
-          {typeof item === 'string' ? (
+          {typeof item === "string" ? (
             <List.Item title={item} />
           ) : (
             <List.Accordion
@@ -90,7 +117,10 @@ const ConfigComponent = () => {
       >
         <View style={stylesConfigs.modal}>
           {modalContent}
-          <TouchableOpacity onPress={() => setModalVisible(false)}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(false)}
+            style={stylesConfigs.btnFechar}
+          >
             <Text>Fechar</Text>
           </TouchableOpacity>
         </View>
