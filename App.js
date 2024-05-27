@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CheckInPage from './src/components/checkin/checkin';
 import Home from './src/pages/home';
 import Config from './src/pages/config';
 import LoginScreen from './src/components/auth/login';

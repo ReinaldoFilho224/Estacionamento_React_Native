@@ -33,7 +33,7 @@ const VeiculoTab = ({ veiculo }) => (
   </View>
 );
 
-export const CheckoutModal = ({ closeModal, modalVisible, setRefresh, document }) => {
+export const CheckoutModal = ({ setRefresh, document }) => {
   if (!document) {
     return null;
   }
@@ -59,7 +59,7 @@ export const CheckoutModal = ({ closeModal, modalVisible, setRefresh, document }
 
       await deleteDoc(doc(db, 'estacionamento', document.id));
 
-      closeModal()
+      // closeModal()
       setRefresh()
 
       alert("Check-out realizado com sucesso!");
@@ -70,31 +70,22 @@ export const CheckoutModal = ({ closeModal, modalVisible, setRefresh, document }
   }
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={closeModal}
-    >
-      <View style={stylesCheckout.modalContainer}>
-        <View style={stylesCheckout.modal}>
-          <ScrollView>
-            <Text style={stylesCheckout.modalTitle}>Realizar Pagamento</Text>
+    <View style={stylesCheckout.modalContainer}>
+      <View style={stylesCheckout.modal}>
+        <ScrollView>
+          <View style={stylesCheckout.cards}>
             <ClienteTab cliente={document.cliente} />
             <VeiculoTab veiculo={document} />
-            <View>
-              <Text style={stylesCheckout.modalTabTitle}>Total a Pagar: {((document.preco_hora / 60) * document.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
-            </View>
-            <TouchableOpacity onPress={() => executeCheckout()} style={stylesCheckout.modalCheckoutButton}>
-              <Text style={stylesCheckout.modalCloseButtonText}> Fazer Checkout</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={closeModal} style={stylesCheckout.modalCloseButton}>
-              <Text style={stylesCheckout.modalCloseButtonText}>Fechar</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
+          </View>
+          <View>
+            <Text style={stylesCheckout.modalTabTitle}>Total a Pagar: {((document.preco_hora / 60) * document.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Text>
+          </View>
+          <TouchableOpacity onPress={() => executeCheckout()} style={stylesCheckout.modalCheckoutButton}>
+            <Text style={stylesCheckout.modalCloseButtonText}> Fazer Checkout</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
-    </Modal>
+    </View>
   );
 };
 
