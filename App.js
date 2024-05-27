@@ -28,8 +28,8 @@ const App = () => {
     return (
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Login" component={LoginScreen} />
-          <Tab.Screen name="Registro" component={RegisterScreen} />
+          <Tab.Screen name="Login" component={LoginScreen} options={{ tabBarLabel: 'Entrar', tabBarIcon: ({ color, size }) => (<Icon name="log-in-outline" size={size} color={color} />) }} />
+          <Tab.Screen name="Registro" component={RegisterScreen} options={{ tabBarLabel: 'Registrar', tabBarIcon: ({ color, size }) => (<Icon name="person-add-outline" size={size} color={color} />) }} />
         </Tab.Navigator>
       </NavigationContainer>
     );
@@ -56,13 +56,17 @@ const App = () => {
 
                 return <Icon name={iconName} size={size} color={color} />;
               },
-              // tabBarStyle: { display: 'none' },
               headerShown: false, 
             })}
+            tabBarOptions={{
+              style: { backgroundColor: '#fff', borderTopWidth: 0, elevation: 0 },
+              activeTintColor: '#FF5733',
+              inactiveTintColor: '#666',
+            }}
           >
-            <Tab.Screen name="Checkin" component={Config} />
-            <Tab.Screen name="E-Park Manager" component={Home} />
-            <Tab.Screen name="Configuração" component={Config} />
+            <Tab.Screen name="Checkin" component={Config} options={{ tabBarLabel: 'Check-in', tabBarIcon: ({ color, size }) => (<Icon name="checkmark-circle-outline" size={size} color={color} />) }} />
+            <Tab.Screen name="E-Park Manager" component={Home} options={{ tabBarLabel: 'E-Park', tabBarIcon: ({ color, size }) => (<Icon name="home-outline" size={size} color={color} />) }} />
+            <Tab.Screen name="Configuração" component={Config} options={{ tabBarLabel: 'Configurações', tabBarIcon: ({ color, size }) => (<Icon name="settings-outline" size={size} color={color} />) }} />
           </Tab.Navigator>
         </NavigationContainer>
       </GestureHandlerRootView>
