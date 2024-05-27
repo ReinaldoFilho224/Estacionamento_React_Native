@@ -9,10 +9,10 @@ import { stylesConfigs } from '../../../assets/css/config';
 import { auth } from '../../config';
 
 const Menu = [
-  'Historico',
-  'Estacionamento',
-  'Saldo',
-  { 'Cliente': ['Ver Clientes', 'Adicionar Clientes'] },
+  "Historico",
+  "Estacionamento",
+  "Saldo",
+  { Cliente: ["Ver Clientes", "Adicionar Clientes"] },
 ];
 
 const ConfigComponent = () => {
@@ -32,16 +32,16 @@ const ConfigComponent = () => {
 
   const handleMenuItemPress = (item) => {
     switch (item) {
-      case 'Ver Clientes':
+      case "Ver Clientes":
         setModalContent(<ViewClientsComponent />);
         break;
-      case 'Adicionar Clientes':
+      case "Adicionar Clientes":
         setModalContent(<AddClientsComponent />);
         break;
-      case 'Historico':
+      case "Historico":
         setModalContent(<HistoricComponent />);
         break;
-      case 'Estacionamento':
+      case "Estacionamento":
         setModalContent(<ParkModalComponent />);
         break;
       default:
@@ -54,10 +54,10 @@ const ConfigComponent = () => {
 
   const handleSubMenuItemPress = (subItem) => {
     switch (subItem) {
-      case 'Ver Clientes':
+      case "Ver Clientes":
         setModalContent(<ViewClientsComponent />);
         break;
-      case 'Adicionar Clientes':
+      case "Adicionar Clientes":
         setModalContent(<AddClientsComponent />);
         break;
       default:
@@ -72,7 +72,7 @@ const ConfigComponent = () => {
     <View>
       {Menu.map((item, index) => (
         <TouchableOpacity key={index} onPress={() => handleMenuItemPress(item)}>
-          {typeof item === 'string' ? (
+          {typeof item === "string" ? (
             <List.Item title={item} />
           ) : (
             <List.Accordion
@@ -105,7 +105,10 @@ const ConfigComponent = () => {
       >
         <View style={stylesConfigs.modal}>
           {modalContent}
-          <TouchableOpacity onPress={() => setModalVisible(false)}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(false)}
+            style={stylesConfigs.btnFechar}
+          >
             <Text>Fechar</Text>
           </TouchableOpacity>
         </View>
