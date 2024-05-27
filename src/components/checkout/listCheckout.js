@@ -1,28 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { stylesCheckout } from "../../../assets/css/checkout";
 import { CheckoutModal } from "./checkoutModal";
 import { db } from "../../config";
 import { useGlobalState } from "../../config/refresh";
 import Spinner from 'react-native-loading-spinner-overlay';
+import { List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const ListCheckout = () => {
     const [park, setPark] = useState([]);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedDocument, setSelectedDocument] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const { refresh, setRefresh } = useGlobalState();
-
-    const openModal = (document) => {
-        setSelectedDocument(document);
-        setModalVisible(true);
-    };
-
-    const closeModal = () => {
-        setModalVisible(false);
-    };
+    const [expanded, setExpanded] = useState(-1);
 
     const invertRefresh = () => {
         setRefresh(!refresh);
@@ -95,30 +86,22 @@ const ListCheckout = () => {
                     overlayColor={'rgba(0, 0, 0, 0.7)'}
                 />
             ) : (
-                <>
-                    {park.length > 0 ? (
-                        park.map((car, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={styles.item}
-                                onPress={() => openModal(car)}
-                            >
-                                <View style={styles.itemInfo}>
-                                    <Text style={styles.itemText}>
-                                        {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                    </Text>
-                                </View>
-                                <Icon name="arrow-forward" size={24} color="#777" />
-                            </TouchableOpacity>
-                        ))
-                    ) : (
-                        <View style={styles.emptyView}>
-                            <Text style={styles.emptyText}>Nenhum veículo estacionado</Text>
+                <View style={stylesCheckout.checkoutView}>
+                    {park.length > 0 ? park.map((car, index) => (
+                        <List.Accordion
+                            title={`${car.placa} - ${car.difTime}`}
+                            expanded={expanded === index}
+                            onPress={() => setExpanded(expanded === index ? -1 : index)}
+                        >   
+                            <CheckoutModal document={car} setRefresh={invertRefresh} />
+                        </List.Accordion>
+                    )) :
+                        <View style={stylesCheckout.textView}>
+                            <Text style={stylesCheckout.text}>Nenhum veículo estacionado</Text>
                         </View>
-                    )}
-                </>
+                    }
+                </View>
             )}
-            <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh} />
         </ScrollView>
     );
 };

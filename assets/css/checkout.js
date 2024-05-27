@@ -54,7 +54,7 @@ export const stylesCheckout = StyleSheet.create({
         height:'100%',
       },
       modal: {
-        width: '80%',
+        width: '100%',
         backgroundColor: '#fff',
         padding: 20,
         borderRadius: 10,
@@ -64,11 +64,18 @@ export const stylesCheckout = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 10,
         borderColor: '#5b85c9',
-        borderWidth: 1,
+        // borderWidth: 1,
         alignItems: 'center',
-        marginVertical:10,
+        // marginVertical:10,
         paddingHorizontal: 20,
-        paddingVertical: 10,
+        // paddingVertical: 10,
+      },
+      cards:{
+        display: 'flex',
+        // flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        // gap: 8,
       },
       modalHeader: {
         flexDirection: 'row',
@@ -78,6 +85,7 @@ export const stylesCheckout = StyleSheet.create({
       modalTabTitle: {
         fontWeight: 'bold',
         fontSize: 18,
+        textAlign: 'center'
     },
       modalTitle: {
         fontWeight: 'bold',
