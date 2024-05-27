@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native"
+import { View, Text, ScrollView } from "react-native"
 import { useState, useEffect } from "react";
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { stylesCheckout } from "../../../assets/css/checkout";
@@ -6,23 +6,13 @@ import { CheckoutModal } from "./checkoutModal";
 import { db } from "../../config";
 import { useGlobalState } from "../../config/refresh";
 import Spinner from 'react-native-loading-spinner-overlay';
+import { List } from 'react-native-paper';
 
 const ListCheckout = () => {
     const [park, setPark] = useState([]);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [selectedDocument, setSelectedDocument] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const { refresh, setRefresh } = useGlobalState();
-
-
-    const openModal = (document) => {
-        setSelectedDocument(document);
-        setModalVisible(true);
-    };
-
-    const closeModal = () => {
-        setModalVisible(false);
-    };
+    const [expanded, setExpanded] = useState(-1);
 
     const invertRefresh = () => {
         setRefresh(!refresh);
@@ -98,33 +88,26 @@ const ListCheckout = () => {
         <ScrollView>
             {isLoading ? (
                 <Spinner
-                visible={isLoading}
-                textContent={'Carregando...'}
-                textStyle={{ color: '#FFF' }}
-                overlayColor={'rgba(0, 0, 0, 0.7)'}
-            />
+                    visible={isLoading}
+                    textContent={'Carregando...'}
+                    textStyle={{ color: '#FFF' }}
+                    overlayColor={'rgba(0, 0, 0, 0.7)'}
+                />
             ) : (
                 <View style={stylesCheckout.checkoutView}>
                     {park.length > 0 ? park.map((car, index) => (
-                        <View key={index} style={stylesCheckout.checkoutItem}>
-                            <Text style={stylesCheckout.textItem}>
-                                {car.placa} - {car.difTime} - {((car.preco_hora / 60) * car.difMin).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                            </Text>
-                            <TouchableOpacity
-                                style={stylesCheckout.button}
-                                onPress={() => openModal(car)}
-                            >
-                                <Text style={stylesCheckout.textButton}>
-                                    Pagar
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
+                        <List.Accordion
+                            title={`${car.placa} - ${car.difTime}`}
+                            expanded={expanded === index}
+                            onPress={() => setExpanded(expanded === index ? -1 : index)}
+                        >   
+                            <CheckoutModal document={car} setRefresh={invertRefresh} />
+                        </List.Accordion>
                     )) :
                         <View style={stylesCheckout.textView}>
                             <Text style={stylesCheckout.text}>Nenhum veículo estacionado</Text>
                         </View>
                     }
-                    <CheckoutModal closeModal={closeModal} modalVisible={modalVisible} document={selectedDocument} setRefresh={invertRefresh} />
                 </View>
             )}
         </ScrollView>

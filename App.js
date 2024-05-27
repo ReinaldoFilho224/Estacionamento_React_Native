@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CheckInPage from './src/components/checkin/checkin';
 import Home from './src/pages/home';
 import Config from './src/pages/config';
 import LoginScreen from './src/components/auth/login';
@@ -63,7 +62,6 @@ const App = () => {
           >
             <Tab.Screen name="Checkin" component={Config} />
             <Tab.Screen name="E-Park Manager" component={Home} />
-            {/* <Tab.Screen name="Checkout" component={Checkout} /> */}
             <Tab.Screen name="Configuração" component={Config} />
           </Tab.Navigator>
         </NavigationContainer>
