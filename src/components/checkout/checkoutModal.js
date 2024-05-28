@@ -1,7 +1,8 @@
 import { collection, addDoc, Timestamp, deleteDoc, doc } from "firebase/firestore";
-import { View, Text, Modal, TouchableOpacity, ScrollView } from "react-native"
+import { View, Text, TouchableOpacity, ScrollView } from "react-native"
 import { stylesCheckout } from "../../../assets/css/checkout"
 import { db } from "../../config";
+import { useGlobalState } from "../../config/refresh";
 
 const ClienteTab = ({ cliente }) => (
   <View style={stylesCheckout.modalTab}>
@@ -33,7 +34,11 @@ const VeiculoTab = ({ veiculo }) => (
   </View>
 );
 
-export const CheckoutModal = ({ setRefresh, document }) => {
+export const CheckoutModal = ({ document }) => {
+  const { refresh, setRefresh } = useGlobalState();
+  const {isModalVisible, setModalVisible, user} = useGlobalState();
+
+
   if (!document) {
     return null;
   }
@@ -42,6 +47,7 @@ export const CheckoutModal = ({ setRefresh, document }) => {
     const horaSaida = new Date();
     try {
       await addDoc(collection(db, "transacoes"), {
+        park_id: user.uid,
         hora_entrada: document.hora_entrada.toDate(),
         hora_saida: Timestamp.fromDate(horaSaida),
         placa: document.placa,
@@ -50,6 +56,7 @@ export const CheckoutModal = ({ setRefresh, document }) => {
       });
 
       await addDoc(collection(db, "historico"), {
+        park_id: user.uid,
         cliente_id: document.cliente_id,
         hora_entrada: document.hora_entrada.toDate(),
         hora_saida: Timestamp.fromDate(horaSaida),
@@ -60,7 +67,7 @@ export const CheckoutModal = ({ setRefresh, document }) => {
       await deleteDoc(doc(db, 'estacionamento', document.id));
 
       // closeModal()
-      setRefresh()
+      setModalVisible(false)
 
       alert("Check-out realizado com sucesso!");
     } catch (error) {

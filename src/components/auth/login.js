@@ -13,7 +13,7 @@ const LoginScreen = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log('Usuário logado');
+        console.log('Usuário autenticado');
       })
       .catch((error) => {
         setError(error.message);

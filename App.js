@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { auth } from './src/config';
 import { onAuthStateChanged } from 'firebase/auth';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useGlobalState } from './src/config/refresh';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,10 +37,11 @@ const App = () => {
   }
 
   return (
-    <GlobalStateProvider>
+    <GlobalStateProvider initialUser={user} setInitialUser={setUser}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NavigationContainer>
           <Tab.Navigator
+            initialRouteName="E-Park Manager"
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
@@ -56,7 +58,7 @@ const App = () => {
 
                 return <Icon name={iconName} size={size} color={color} />;
               },
-              headerShown: false, 
+              headerShown: false,
             })}
             tabBarOptions={{
               style: { backgroundColor: '#fff', borderTopWidth: 0, elevation: 0 },

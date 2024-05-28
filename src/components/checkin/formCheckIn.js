@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, TextInput, Text, Modal, TouchableOpacity} from "react-native";
+import { View, Button, TextInput} from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, where, query } from "firebase/firestore";
 import { useGlobalState } from "../../config/refresh";
 import { db } from "../../config";
 import { MaskedTextInput } from "react-native-mask-text";
 import { stylesCheckin } from "../../../assets/css/checkin";
 
-const CheckInForm = ({ onCheckIn }) => {
+const CheckInForm = ({ onCheckIn, preco_hora }) => {
     const [clientes, setClientes] = useState([]);
     const [selectedClienteId, setSelectedClienteId] = useState("");
     const [placa, setPlaca] = useState("");
-    const [precoHora, setPrecoHora] = useState("");
-    const { refresh } = useGlobalState();
+    const [carModel, setCarModel] = useState("");
+    const { refresh , user } = useGlobalState();
 
     useEffect(() => {
         const fetchClientes = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, "clientes"));
+                const clientsQuery = query(
+                    collection(db, "clientes"),
+                    where("park_id", "==", user.uid)
+                  );
+          
+                const querySnapshot = await getDocs(clientsQuery);
                 const clientesData = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
@@ -29,14 +34,15 @@ const CheckInForm = ({ onCheckIn }) => {
         };
 
         fetchClientes();
+        
     }, [refresh]);
 
 
     const handleCheckIn = () => {
         const horaEntrada = new Date();
 
-        if (precoHora === undefined || precoHora === null) {
-            console.error("precoHora não está definido corretamente");
+        if (carModel === undefined || carModel === null) {
+            console.error("carModel não está definido corretamente");
             return;
         }
 
@@ -44,14 +50,14 @@ const CheckInForm = ({ onCheckIn }) => {
             clienteId: selectedClienteId,
             horaEntrada,
             placa,
-            precoHora,
+            carModel,
             status: true,
         };
 
         onCheckIn(formData)
             .then(() => {
                 setPlaca('');
-                setPrecoHora('');
+                setCarModel('');
             })
             .catch((error) => {
                 console.error('Erro ao fazer check-in:', error);
@@ -81,10 +87,9 @@ const CheckInForm = ({ onCheckIn }) => {
                 style={stylesCheckin.input}
             />
             <TextInput
-                value={precoHora}
-                onChangeText={setPrecoHora}
-                placeholder="Preço por Hora"
-                keyboardType="numeric"
+                value={preco_hora}
+                onChangeText={setCarModel}
+                placeholder="Modelo do Veículo"
                 style={stylesCheckin.input}
             />
             <View style={stylesCheckin.buttonsArea}>

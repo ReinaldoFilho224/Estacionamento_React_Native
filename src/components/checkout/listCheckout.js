@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { View, Text, ScrollView } from "react-native";
+import { collection, getDocs, getDoc, doc, query, where } from "firebase/firestore";
 import { stylesCheckout } from "../../../assets/css/checkout";
 import { CheckoutModal } from "./checkoutModal";
 import { db } from "../../config";
 import { useGlobalState } from "../../config/refresh";
 import Spinner from 'react-native-loading-spinner-overlay';
 import { List } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const ListCheckout = () => {
     const [park, setPark] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const { refresh, setRefresh } = useGlobalState();
+    const { refresh, user, setVagasOcup } = useGlobalState();
     const [expanded, setExpanded] = useState(-1);
-
-    const invertRefresh = () => {
-        setRefresh(!refresh);
-    };
 
     function adicionarZero(numero) {
         return numero < 10 ? `0${numero}` : numero;
@@ -27,11 +22,19 @@ const ListCheckout = () => {
         const fetchDataAndSetTimer = async () => {
             try {
                 setIsLoading(true);
-                const querySnapshot = await getDocs(collection(db, "estacionamento"));
+                const estacionamentoQuery = query(
+                    collection(db, "estacionamento"),
+                    where("park_id", "==", user.uid)
+                );
+
+                const querySnapshot = await getDocs(estacionamentoQuery);
+
                 const estacionamentoData = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
                 }));
+
+                setVagasOcup(estacionamentoData.length)
 
                 if (estacionamentoData.length > 0) {
                     const updatedTimes = await Promise.all(estacionamentoData.map(async (documento) => {
@@ -77,7 +80,7 @@ const ListCheckout = () => {
     }, [refresh]);
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={stylesCheckout.container}>
             {isLoading ? (
                 <Spinner
                     visible={isLoading}
@@ -92,8 +95,9 @@ const ListCheckout = () => {
                             title={`${car.placa} - ${car.difTime}`}
                             expanded={expanded === index}
                             onPress={() => setExpanded(expanded === index ? -1 : index)}
-                        >   
-                            <CheckoutModal document={car} setRefresh={invertRefresh} />
+                            key={index}
+                        >
+                            <CheckoutModal document={car} />
                         </List.Accordion>
                     )) :
                         <View style={stylesCheckout.textView}>
@@ -105,37 +109,5 @@ const ListCheckout = () => {
         </ScrollView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flexGrow: 1,
-        paddingVertical: 20,
-        paddingHorizontal: 15,
-    },
-    item: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: 15,
-        borderRadius: 8,
-        marginBottom: 10,
-        elevation: 2,
-    },
-    itemInfo: {
-        flex: 1,
-    },
-    itemText: {
-        fontSize: 16,
-    },
-    emptyView: {
-        alignItems: 'center',
-        marginTop: 50,
-    },
-    emptyText: {
-        fontSize: 16,
-        color: '#777',
-    },
-});
 
 export default ListCheckout;

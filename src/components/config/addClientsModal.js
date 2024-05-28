@@ -9,7 +9,7 @@ const AddClientsComponent = () => {
     const [cpf, setCpf] = useState('');
     const [nome, setNome] = useState('');
     const [telefone, setTelefone] = useState('');
-    const {refresh, setRefresh} = useGlobalState();
+    const {refresh, setRefresh, user} = useGlobalState();
 
     const handleCreateClient = async () => {
         try {
@@ -21,6 +21,7 @@ const AddClientsComponent = () => {
                 cpf,
                 nome,
                 telefone,
+                park_id:user.uid
             });
             setCpf('');
             setNome('');
