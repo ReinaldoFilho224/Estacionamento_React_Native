@@ -56,8 +56,9 @@ const RegisterScreen = () => {
         secureTextEntry
       />
 
-      <Button style={registerStyle.button} 
-      title="Registrar" onPress={handleRegister} />
+    <TouchableOpacity style={registerStyle.button} onPress={handleRegister}>
+        <Text style={registerStyle.buttonText}>Registrar</Text>
+      </TouchableOpacity>
       {error ? <Text>{error}</Text> : null}
     </View>
   );

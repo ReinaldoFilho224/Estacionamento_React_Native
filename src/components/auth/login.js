@@ -37,11 +37,9 @@ const LoginScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button
-        title="ENTRAR"
-        onPress={handleLogin}
-        style={loginStyle.button} 
-      />
+    <TouchableOpacity style={loginStyle.button} onPress={handleLogin}>
+        <Text style={loginStyle.buttonText}>ENTRAR</Text>
+      </TouchableOpacity>
       {error ? <Text style={loginStyle.errorText}>{error}</Text> : null} 
     </View>
   );

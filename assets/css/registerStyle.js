@@ -10,7 +10,7 @@ const registerStyle = StyleSheet.create({
   },
   input: {
     backgroundColor: "#F2F2F2",
-    width: "100%",
+    width: "80%",
     height: 40,
     marginBottom: 10,
     paddingHorizontal: 15,
@@ -19,7 +19,7 @@ const registerStyle = StyleSheet.create({
     borderColor: "#CCCCCC",
   },
   button: {
-    width: "100%",
+    width: "50%",
     height: 40,
     backgroundColor: "#007bff",
     justifyContent: "center",
