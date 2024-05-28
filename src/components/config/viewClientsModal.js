@@ -2,15 +2,23 @@ import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import { db } from "../../config";
 import { stylesConfigs } from "../../../assets/css/config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, where, query } from "firebase/firestore";
+import { useGlobalState } from "../../config/refresh";
 
 const ViewClientsComponent = () => {
   const [clients, setClients] = useState([]);
+  const {user} = useGlobalState()
+
 
   useEffect(() => {
     const fetchDataAndSetTimer = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "clientes"));
+        const clientsQuery = query(
+          collection(db, "clientes"),
+          where("park_id", "==", user.uid)
+        );
+
+        const querySnapshot = await getDocs(clientsQuery);
         const clientsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),

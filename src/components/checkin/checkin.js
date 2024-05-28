@@ -3,19 +3,19 @@ import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from '../../config/index'
 import CheckInForm from "./formCheckIn";
 import { useGlobalState } from "../../config/refresh";
-import { View } from "react-native";
-import { stylesCheckin } from "../../../assets/css/checkin";
 
 const CheckInPage = () => {
-  const { refresh, setRefresh } = useGlobalState();
+  const { refresh, setRefresh, user, parkConfigs} = useGlobalState();
 
+  // console.log(parkConfigs)
   const handleCheckIn = async (formData) => {
     try {
       await addDoc(collection(db, "estacionamento"), {
+        park_id:user.uid,
         cliente_id: formData.clienteId,
         hora_entrada: Timestamp.fromDate(formData.horaEntrada),
         placa: formData.placa,
-        preco_hora: parseFloat(formData.precoHora),
+        preco_hora: parkConfigs.preco_hora,
         status: true
       });
       setRefresh(!refresh)
@@ -27,7 +27,7 @@ const CheckInPage = () => {
   };
 
   return (
-      <CheckInForm onCheckIn={handleCheckIn} />
+      <CheckInForm onCheckIn={handleCheckIn}/>
   );
 };
 

@@ -1,9 +1,9 @@
-import { View, Text } from "react-native"
+import { View, Text, } from "react-native"
 
 const ParkModalComponent = () => {
     return(
         <View>
-            <Text>Batata</Text>
+            <Text>Batataaaaa</Text>
         </View>
     )
 }
