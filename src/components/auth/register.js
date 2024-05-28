@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { auth } from '../../config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import registerStyle from '../../../assets/css/registerStyle';
+import registerStyle from '../../../assets/css/registerStyle'; 
 
 const RegisterScreen = () => {
   const [name, setName] = useState(''); 
@@ -56,10 +56,10 @@ const RegisterScreen = () => {
         secureTextEntry
       />
 
-    <TouchableOpacity style={registerStyle.button} onPress={handleRegister}>
+      <TouchableOpacity style={registerStyle.button} onPress={handleRegister}>
         <Text style={registerStyle.buttonText}>Registrar</Text>
       </TouchableOpacity>
-      {error ? <Text>{error}</Text> : null}
+      {error ? <Text style={registerStyle.errorText}>{error}</Text> : null}
     </View>
   );
 };
