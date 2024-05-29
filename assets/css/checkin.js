@@ -3,13 +3,23 @@ import { StyleSheet } from 'react-native';
 export const stylesCheckin = StyleSheet.create({
     input: {
         backgroundColor: '#FFF',
-        width: '80%', 
+        width: '100%', 
         padding: 12, 
         borderRadius: 10, 
         marginBottom: 20, 
         fontSize: 16, 
         color: '#333', 
         elevation: 3, 
+    },
+    inputSelector:{
+        width:'100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap:5,
+    },
+    text:{
+        color:'#fff',
+        fontSize: 18,
     },
     TitleCheckin: {
         color: '#fff',
@@ -31,11 +41,6 @@ export const stylesCheckin = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
-        borderRadius: 20, 
-        backgroundColor: '#1E829D', 
-        borderWidth: 2, 
-        borderColor: 'rgba(0, 0, 0, 0.5)', 
     },
     modal: {
         backgroundColor: '#FFF', 
@@ -51,15 +56,34 @@ export const stylesCheckin = StyleSheet.create({
         justifyContent: 'center', 
     },
     button: {
-        backgroundColor: '#5b85c9',
+        backgroundColor: '#FF5733',
         paddingVertical: 12, 
         paddingHorizontal: 20, 
         borderRadius: 8,
         marginHorizontal: 10, 
+        width:'75%',
+        justifyContent:'center',
+        alignItems:'center',
+        display:'flex'
+    },
+    buttonDisabled: {
+        backgroundColor: 'gray',
+        paddingVertical: 12, 
+        paddingHorizontal: 20, 
+        borderRadius: 8,
+        marginHorizontal: 10, 
+        width:'75%',
+        justifyContent:'center',
+        alignItems:'center',
+        display:'flex'
     },
     buttonText: {
         color: '#FFF',
         fontSize: 16,
         fontWeight: 'bold', 
+    },
+    image:{
+        width:'50%',
+        height:'30%'
     },
 });

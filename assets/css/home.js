@@ -87,11 +87,13 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: '100%',
     padding: 20,
+    backgroundColor: '#1E829D'
   },
   modalHeaderText: {
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 10,
+    color:'#fff',
   },
   headerModal: {
     flexDirection: 'row',

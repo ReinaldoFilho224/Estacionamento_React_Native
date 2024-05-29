@@ -161,13 +161,13 @@ const Home = () => {
             <Modal
                 isVisible={isModalVisible}
                 onBackdropPress={() => setModalVisible(false)}
-                style={{ justifyContent: 'flex-end', margin: 0 }}
+                style={{ justifyContent: 'flex-end', margin: 0,}}
             >
                 <View style={styles.modalContent}>
                     <View style={styles.headerModal}>
                         <TouchableOpacity onPress={() => setModalVisible(false)}>
                             <Text style={styles.buttonClose}>
-                                <Icon name="chevron-back-outline" size={30} color="#000" />
+                                <Icon name="chevron-back-outline" size={30} color="#fff" />
                             </Text>
                         </TouchableOpacity>
                         <Text style={styles.modalHeaderText}>
@@ -186,7 +186,7 @@ const Home = () => {
                         </Text>
                         {modalContent === "checkin" &&
                             <TouchableOpacity onPress={handleAddClient}>
-                                <Icon name="person-add-outline" size={30} color="#000" />
+                                <Icon name="person-add-outline" size={30} color="#fff" />
                             </TouchableOpacity>
                         }
                     </View>
