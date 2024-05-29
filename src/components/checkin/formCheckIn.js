@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, TextInput} from "react-native";
+import { View, TouchableOpacity, TextInput, Text, Image } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import { useGlobalState } from "../../config/refresh";
@@ -12,7 +12,23 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
     const [selectedClienteId, setSelectedClienteId] = useState("");
     const [placa, setPlaca] = useState("");
     const [carModel, setCarModel] = useState("");
-    const { refresh , user } = useGlobalState();
+    const { refresh, user } = useGlobalState();
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    const handlePlacaChange = (text) => {
+        setPlaca(text.toUpperCase());
+    };
+
+    useEffect(() => {
+        const checkFormValidity = () => {
+            if (placa && carModel && selectedClienteId) {
+                setIsFormValid(true);
+            } else {
+                setIsFormValid(false);
+            }
+        };
+        checkFormValidity();
+    }, [placa, carModel, selectedClienteId]);
 
     useEffect(() => {
         const fetchClientes = async () => {
@@ -20,8 +36,8 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
                 const clientsQuery = query(
                     collection(db, "clientes"),
                     where("park_id", "==", user.uid)
-                  );
-          
+                );
+
                 const querySnapshot = await getDocs(clientsQuery);
                 const clientesData = querySnapshot.docs.map((doc) => ({
                     id: doc.id,
@@ -34,7 +50,7 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
         };
 
         fetchClientes();
-        
+
     }, [refresh]);
 
 
@@ -58,6 +74,7 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
             .then(() => {
                 setPlaca('');
                 setCarModel('');
+                setIsFormValid(true)
             })
             .catch((error) => {
                 console.error('Erro ao fazer check-in:', error);
@@ -65,35 +82,57 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
     };
     return (
         <View style={stylesCheckin.inputArea}>
-            <Picker
-                selectedValue={selectedClienteId}
-                onValueChange={(itemValue) => setSelectedClienteId(itemValue)}
-                style={stylesCheckin.input}
-            >
-                <Picker.Item label="Selecione um cliente" value="" />
-                {clientes.map((cliente) => (
-                    <Picker.Item
-                        key={cliente.id}
-                        label={cliente.nome}
-                        value={cliente.id}
-                    />
-                ))}
-            </Picker>
-            <MaskedTextInput
-                value={placa}
-                onChangeText={setPlaca}
-                placeholder="Placa do Veículo"
-                mask="AAA-9999"
-                style={stylesCheckin.input}
+            <Image
+                source={require('../../../assets/checkin.png')}
+                style={stylesCheckin.image}
             />
-            <TextInput
-                value={preco_hora}
-                onChangeText={setCarModel}
-                placeholder="Modelo do Veículo"
-                style={stylesCheckin.input}
-            />
+            <View style={stylesCheckin.inputSelector}>
+                <Text style={stylesCheckin.text} >Cliente: </Text>
+                <Picker
+                    selectedValue={selectedClienteId}
+                    onValueChange={(itemValue) => setSelectedClienteId(itemValue)}
+                    style={stylesCheckin.input}
+                >
+                    <Picker.Item label="Selecione um cliente" value="" />
+                    {clientes.map((cliente) => (
+                        <Picker.Item
+                            key={cliente.id}
+                            label={cliente.nome}
+                            value={cliente.id}
+                        />
+                    ))}
+                </Picker>
+            </View>
+            <View style={stylesCheckin.inputSelector}>
+                <Text style={stylesCheckin.text}>Placa do Veículo:</Text>
+                <MaskedTextInput
+                    value={placa}
+                    onChangeText={handlePlacaChange}
+                    placeholder="Placa do Veículo"
+                    mask="AAA-9999"
+                    style={stylesCheckin.input}
+                />
+            </View>
+            <View style={stylesCheckin.inputSelector}>
+                <Text style={stylesCheckin.text}>Modelo do Veículo:</Text>
+                <TextInput
+                    value={preco_hora}
+                    onChangeText={setCarModel}
+                    placeholder="Modelo do Veículo"
+                    style={stylesCheckin.input}
+                />
+            </View>
             <View style={stylesCheckin.buttonsArea}>
-                <Button title="Check-In" onPress={handleCheckIn} />
+                <TouchableOpacity
+                    title="Check-In"
+                    onPress={handleCheckIn}
+                    disabled={!isFormValid}
+                    style={isFormValid ? stylesCheckin.button : stylesCheckin.buttonDisabled}
+                >
+                    <View>
+                        <Text>Checkin</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     );
