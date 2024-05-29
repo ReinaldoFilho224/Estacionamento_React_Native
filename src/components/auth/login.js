@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { auth } from '../../config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import loginStyle from '../../../assets/css/loginStyle';
+import loginStyle from '../../../assets/css/loginStyle'; // Certifique-se que o caminho está correto
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ const LoginScreen = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log('Usuário autenticado');
+        console.log('Usuário logado');
       })
       .catch((error) => {
         setError(error.message);
@@ -37,11 +37,9 @@ const LoginScreen = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button
-        title="ENTRAR"
-        onPress={handleLogin}
-        style={loginStyle.button} 
-      />
+      <TouchableOpacity style={loginStyle.button} onPress={handleLogin}>
+        <Text style={loginStyle.buttonText}>ENTRAR</Text>
+      </TouchableOpacity>
       {error ? <Text style={loginStyle.errorText}>{error}</Text> : null} 
     </View>
   );
