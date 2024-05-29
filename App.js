@@ -10,7 +10,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { auth } from './src/config';
 import { onAuthStateChanged } from 'firebase/auth';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useGlobalState } from './src/config/refresh';
 
 const Tab = createBottomTabNavigator();
 
@@ -59,16 +58,18 @@ const App = () => {
                 return <Icon name={iconName} size={size} color={color} />;
               },
               headerShown: false,
+              tabBarActiveTintColor: "#FF5733",
+              tabBarInactiveTintColor: "#666",
+              tabBarStyle: {
+                backgroundColor: '#fff',
+                borderTopWidth: 0,
+                elevation: 0,
+              },
             })}
-            tabBarOptions={{
-              style: { backgroundColor: '#fff', borderTopWidth: 0, elevation: 0 },
-              activeTintColor: '#FF5733',
-              inactiveTintColor: '#666',
-            }}
           >
-            <Tab.Screen name="Checkin" component={Config} options={{ tabBarLabel: 'Check-in', tabBarIcon: ({ color, size }) => (<Icon name="checkmark-circle-outline" size={size} color={color} />) }} />
+            <Tab.Screen name="Caixa" component={Config} options={{ tabBarLabel: 'Caixa', tabBarIcon: ({ color, size }) => (<Icon name="cash-outline" size={size} color={color} />) }} />
             <Tab.Screen name="E-Park Manager" component={Home} options={{ tabBarLabel: 'E-Park', tabBarIcon: ({ color, size }) => (<Icon name="home-outline" size={size} color={color} />) }} />
-            <Tab.Screen name="Configuração" component={Config} options={{ tabBarLabel: 'Configurações', tabBarIcon: ({ color, size }) => (<Icon name="settings-outline" size={size} color={color} />) }} />
+            <Tab.Screen name="Perfil" component={Config} options={{ tabBarLabel: 'Perfil', tabBarIcon: ({ color, size }) => (<Icon name="person-circle-outline" size={size} color={color} />) }} />
           </Tab.Navigator>
         </NavigationContainer>
       </GestureHandlerRootView>
