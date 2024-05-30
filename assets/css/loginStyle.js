@@ -1,3 +1,4 @@
+// loginStyle.js
 import { StyleSheet } from 'react-native';
 
 const loginStyle = StyleSheet.create({
@@ -5,34 +6,40 @@ const loginStyle = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF', 
-    paddingHorizontal: 20, 
+    padding: 16,
+    backgroundColor:"#102C57"
+  },
+  logo: {
+    width: 150,
+    height: 120,
+    marginBottom: 32,
   },
   input: {
-    backgroundColor: '#F2F2F2', 
-    width: '80%',
+    width: '100%',
     height: 40,
-    marginBottom: 10, 
-    paddingHorizontal: 15, 
-    borderRadius: 10, 
+    borderColor: '#ccc',
     borderWidth: 1,
-    borderColor: '#CCCCCC', 
+    marginBottom: 16,
+    paddingLeft: 8,
+    borderRadius:10,
+    backgroundColor: "#FEFAF6"
   },
   button: {
-    width: '50%', 
+    width: '90%',
     height: 40,
-    backgroundColor: '#007bff', 
+    backgroundColor: '#007bff',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    marginBottom: 16,
+    borderRadius:10
   },
   buttonText: {
-    color: '#FFFFFF', 
+    color: '#fff',
     fontSize: 16,
   },
   errorText: {
-    color: 'red', 
-    marginTop: 10,
+    color: 'red',
+    marginTop: 8,
   },
 });
 

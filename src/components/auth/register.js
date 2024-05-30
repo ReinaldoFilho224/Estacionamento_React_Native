@@ -85,7 +85,7 @@ const RegisterScreen = () => {
         secureTextEntry
       />
 
-      <Text>Configurações do Estacionamento</Text>
+      <Text style={registerStyle.text}>Configurações do Estacionamento</Text>
       <TextInput
         style={registerStyle.input}
         placeholder="Valor da Hora"
