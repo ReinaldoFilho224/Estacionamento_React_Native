@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import { db } from "../../config";
-import { stylesConfigs } from "../../../assets/css/config";
+import { stylesConfigs } from "../../../assets/css/configSty";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import { useGlobalState } from "../../config/refresh";
 

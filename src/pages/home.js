@@ -11,6 +11,7 @@ import { db } from "../config";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { useGlobalState } from "../config/refresh";
 import ViewClientsComponent from "../components/config/viewClientsModal";
+import Config from "./config";
 
 const Home = () => {
     const { isModalVisible, setModalVisible } = useGlobalState();
@@ -34,7 +35,7 @@ const Home = () => {
                 return <ViewClientsComponent />;
             case "history":
             case "config":
-                return <AddClientsComponent />;
+                return <Config />;
             default:
                 return null;
         }

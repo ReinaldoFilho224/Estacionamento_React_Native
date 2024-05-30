@@ -37,6 +37,12 @@ const loginStyle = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
+
+  registerText: {
+    color: "#FEFAF6",
+    fontSize: 15,
+  },
+  
   errorText: {
     color: 'red',
     marginTop: 8,

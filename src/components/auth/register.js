@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, updateProfile, deleteUser } from 'firebase/auth';
-import { getFirestore, doc, setDoc, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import registerStyle from '../../../assets/css/registerStyle';
 import { db } from '../../config';
 
 const auth = getAuth();
 const firestore = getFirestore();
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -102,11 +102,13 @@ const RegisterScreen = () => {
         keyboardType="numeric"
       />
 
-
       <TouchableOpacity style={registerStyle.button} onPress={handleRegister}>
         <Text style={registerStyle.buttonText}>Registrar</Text>
       </TouchableOpacity>
       {error ? <Text style={registerStyle.errorText}>{error}</Text> : null}
+      <TouchableOpacity onPress={() => navigation.goBack()} style={registerStyle.backButton}>
+        <Text style={registerStyle.backButtonText}>Voltar</Text>
+      </TouchableOpacity>
     </View>
   );
 };

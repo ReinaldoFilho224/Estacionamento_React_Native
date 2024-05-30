@@ -4,7 +4,7 @@ import { auth } from '../../config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import loginStyle from '../../../assets/css/loginStyle'; 
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -44,7 +44,10 @@ const LoginScreen = () => {
       <TouchableOpacity style={loginStyle.button} onPress={handleLogin}>
         <Text style={loginStyle.buttonText}>ENTRAR</Text>
       </TouchableOpacity>
-      {error ? <Text style={loginStyle.errorText}>{error}</Text> : null} 
+      {error ? <Text style={loginStyle.errorText}>{error}</Text> : null}
+      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+        <Text style={loginStyle.registerText}>Não tem uma conta? Registre-se</Text>
+      </TouchableOpacity>
     </View>
   );
 };
