@@ -25,7 +25,7 @@ const loginStyle = StyleSheet.create({
     backgroundColor: "#FEFAF6"
   },
   button: {
-    width: '90%',
+    width: '100%',
     height: 40,
     backgroundColor: '#007bff',
     justifyContent: 'center',

@@ -34,6 +34,7 @@ const Home = () => {
             case "listClient":
                 return <ViewClientsComponent />;
             case "history":
+                return <ViewClientsComponent />;
             case "config":
                 return <Config />;
             default:

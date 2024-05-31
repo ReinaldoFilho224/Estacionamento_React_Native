@@ -24,7 +24,7 @@ const registerStyle = StyleSheet.create({
     fontSize: 16,
   },
   button: {
-    width: "90%",
+    width: "100%",
     height: 40,
     backgroundColor: "#007bff",
     justifyContent: "center",
@@ -41,7 +41,7 @@ const registerStyle = StyleSheet.create({
     marginTop: 10,
   },
   backButton: {
-    width: "90%",
+    width: "100%",
     height: 40,
     backgroundColor: "#FF5733",
     justifyContent: "center",
