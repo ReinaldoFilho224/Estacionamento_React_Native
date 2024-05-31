@@ -11,55 +11,34 @@ import { db } from "../config";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { useGlobalState } from "../config/refresh";
 import ViewClientsComponent from "../components/config/viewClientsModal";
-
+import Config from "./config";
 
 const Home = () => {
     const { isModalVisible, setModalVisible } = useGlobalState();
     const [modalContent, setModalContent] = useState(null);
     const { refresh, setRefresh, user, setParkConfigs, parkConfigs } = useGlobalState();
 
-    const handleCheckin = () => {
-        setModalContent("checkin");
-        setModalVisible(true);
-    };
-
-    const handleCheckout = () => {
-        setModalContent("checkout");
-        setModalVisible(true);
-    };
-
-    const handleListClient = () => {
-        setModalContent("listClient");
-        setModalVisible(true);
-    };
-    const handleHistory = () => {
-        setModalContent("history");
-        setModalVisible(true);
-    };
-    const handleConfig = () => {
-        setModalContent("config");
-        setModalVisible(true);
-    };
-    const handleAddClient = () => {
-        setModalContent("addClient");
+    const handleModal = (content) => {
+        setModalContent(content);
         setModalVisible(true);
     };
 
     const renderModalContent = () => {
-        if (modalContent === "checkin") {
-            return <CheckInPage />;
-        } else if (modalContent === "checkout") {
-            return <ListCheckout setModalVisible={setModalVisible} />;
-        } else if (modalContent === "addClient") {
-            return <AddClientsComponent />;
-        } else if (modalContent === "listClient") {
-            return <ViewClientsComponent />;
-        } else if (modalContent === "history") {
-            return <AddClientsComponent />;
-        } else if (modalContent === "Config") {
-            return <AddClientsComponent />;
+        switch (modalContent) {
+            case "checkin":
+                return <CheckInPage />;
+            case "checkout":
+                return <ListCheckout setModalVisible={setModalVisible} />;
+            case "addClient":
+                return <AddClientsComponent />;
+            case "listClient":
+                return <ViewClientsComponent />;
+            case "history":
+            case "config":
+                return <Config />;
+            default:
+                return null;
         }
-        return null;
     };
 
     useEffect(() => {
@@ -75,7 +54,6 @@ const Home = () => {
                     id: doc.id,
                     ...doc.data()
                 }));
-                console.log(user.uid);
 
                 if (configsData.length > 0) {
                     setParkConfigs(configsData[0]);
@@ -88,7 +66,6 @@ const Home = () => {
         };
         fetchDataAndSetTimer();
     }, [refresh]);
-
 
     return (
         <View style={styles.container}>
@@ -108,14 +85,14 @@ const Home = () => {
                 <View style={styles.lineMenu}>
                     <View style={styles.menuArea}>
                         <ButtonMenu
-                            functionModal={handleCheckin}
+                            functionModal={() => handleModal("checkin")}
                             icon="checkmark-circle-outline"
                             iconColor="green"
                             textButton="Realizar Checkin"
                         />
 
                         <ButtonMenu
-                            functionModal={handleCheckout}
+                            functionModal={() => handleModal("checkout")}
                             icon="log-out-outline"
                             iconColor="red"
                             textButton="Realizar Checkout"
@@ -125,34 +102,31 @@ const Home = () => {
                 <View style={styles.lineMenu}>
                     <View style={styles.menuArea}>
                         <ButtonMenu
-                            functionModal={handleListClient}
+                            functionModal={() => handleModal("listClient")}
                             icon="people-outline"
-                            iconColor="#1E829D"
+                            iconColor="#102C57"
                             textButton="Lista de Clientes"
-                        // small
                         />
-
                         <ButtonMenu
-                            functionModal={handleAddClient}
+                            functionModal={() => handleModal("addClient")}
                             icon="person-add-outline"
-                            iconColor="#1E829D"
+                            iconColor="#102C57"
                             textButton="Adicionar Cliente"
-                        // small
                         />
                     </View>
                 </View>
                 <View style={styles.lineMenu}>
                     <View style={styles.menuArea}>
                         <ButtonMenu
-                            functionModal={handleHistory}
+                            functionModal={() => handleModal("history")}
                             icon="time-outline"
-                            iconColor="#1E829D"
+                            iconColor="#102C57"
                             textButton="Historico"
                         />
                         <ButtonMenu
-                            functionModal={handleConfig}
+                            functionModal={() => handleModal("config")}
                             icon="settings-outline"
-                            iconColor="#1E829D"
+                            iconColor="#102C57"
                             textButton="Configuração"
                         />
                     </View>
@@ -161,31 +135,23 @@ const Home = () => {
             <Modal
                 isVisible={isModalVisible}
                 onBackdropPress={() => setModalVisible(false)}
-                style={{ justifyContent: 'flex-end', margin: 0,}}
+                style={{ justifyContent: 'flex-end', margin: 0 }}
             >
                 <View style={styles.modalContent}>
                     <View style={styles.headerModal}>
                         <TouchableOpacity onPress={() => setModalVisible(false)}>
-                            <Text style={styles.buttonClose}>
-                                <Icon name="chevron-back-outline" size={30} color="#fff" />
-                            </Text>
+                            <Icon name="chevron-back-outline" size={30} color="#fff" />
                         </TouchableOpacity>
                         <Text style={styles.modalHeaderText}>
-                            {modalContent === "checkin" ?
-                                'Realizar Checkin' :
-                                modalContent === "checkout" ?
-                                    'Realizar Checkout' :
-                                    modalContent === "listClient" ?
-                                        'Lista de Clientes'
-                                        : modalContent === "history" ?
-                                            'Historico'
-                                            : modalContent === "config" ?
-                                                'Configuração'
-                                                :
+                            {modalContent === "checkin" ? 'Realizar Checkin' :
+                                modalContent === "checkout" ? 'Realizar Checkout' :
+                                    modalContent === "listClient" ? 'Lista de Clientes' :
+                                        modalContent === "history" ? 'Historico' :
+                                            modalContent === "config" ? 'Configuração' :
                                                 'Adicionar Cliente'}
                         </Text>
                         {modalContent === "checkin" &&
-                            <TouchableOpacity onPress={handleAddClient}>
+                            <TouchableOpacity onPress={() => handleModal("addClient")}>
                                 <Icon name="person-add-outline" size={30} color="#fff" />
                             </TouchableOpacity>
                         }
