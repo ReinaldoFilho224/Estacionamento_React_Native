@@ -3,7 +3,7 @@ import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { collection, addDoc } from 'firebase/firestore';
 import { useGlobalState } from '../../config/refresh';
 import { db } from '../../config';
-import { stylesConfigs } from '../../../assets/css/config';
+import { stylesConfigs } from '../../../assets/css/configSty';
 
 const AddClientsComponent = () => {
     const [cpf, setCpf] = useState('');
@@ -37,7 +37,6 @@ const AddClientsComponent = () => {
     };
     return (
         <View style={stylesConfigs.formClientContainer}>
-            <Text style={stylesConfigs.formClientTitle}>Cadastar Cliente</Text>
             <View>
                 <Text style={stylesConfigs.formClientLabel}>CPF</Text>
                 <TextInput

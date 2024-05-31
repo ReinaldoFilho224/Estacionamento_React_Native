@@ -1,13 +1,27 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
-export const stylesConfigs = StyleSheet.create({
-  modal: {
-    height: "100%",
+export const stylesConfigs  = StyleSheet.create({
+  container: {
     flex: 1,
-    backgroundColor: "#5b85c9",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  button: {
+    backgroundColor: '#ff5733', 
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#ffffff', 
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   itens: {
     // flexDirection: 'row',
@@ -21,23 +35,6 @@ export const stylesConfigs = StyleSheet.create({
     margin: 10,
     padding: 15,
     alignItems: "flex-start",
-  },
-  itensHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-    alignItems: "flex-start",
-    padding: 10,
-
-    // gap: 20,
-  },
-  title: {
-    fontSize: 25,
-    color: "#fff",
-    fontWeight: "bold",
-    justifyContent: "center",
-    alignItems: "center",
-    display: "flex",
   },
   formClientContainer: {
     width: "100%",
@@ -61,13 +58,5 @@ export const stylesConfigs = StyleSheet.create({
     width: "100%",
     borderRadius: 15,
     padding: 10,
-  },
-  btnFechar: {
-    marginTop: 10,
-    backgroundColor: "#F0FFF0",
-    padding: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
   },
 });

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
 import { auth } from '../../config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import loginStyle from '../../../assets/css/loginStyle'; // Certifique-se que o caminho está correto
+import loginStyle from '../../../assets/css/loginStyle'; 
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,7 +21,11 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={loginStyle.container}> 
+    <View style={loginStyle.container}>
+      <Image 
+        source={require('../../../assets/user-icon.png')} 
+        style={loginStyle.logo} 
+      />
       <TextInput 
         style={loginStyle.input} 
         placeholder="Email"
@@ -40,7 +44,10 @@ const LoginScreen = () => {
       <TouchableOpacity style={loginStyle.button} onPress={handleLogin}>
         <Text style={loginStyle.buttonText}>ENTRAR</Text>
       </TouchableOpacity>
-      {error ? <Text style={loginStyle.errorText}>{error}</Text> : null} 
+      {error ? <Text style={loginStyle.errorText}>{error}</Text> : null}
+      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+        <Text style={loginStyle.registerText}>Não tem uma conta? Registre-se</Text>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -5,12 +5,12 @@ const registerStyle = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#102C57",
     paddingHorizontal: 20,
   },
   input: {
-    backgroundColor: "#F2F2F2",
-    width: "80%",
+    backgroundColor: "#FEFAF6",
+    width: "100%",
     height: 40,
     marginBottom: 10,
     paddingHorizontal: 15,
@@ -18,13 +18,19 @@ const registerStyle = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#CCCCCC",
   },
+  text: {
+    color: "#FEFAF6",
+    margin: 10,
+    fontSize: 16,
+  },
   button: {
-    width: "50%",
+    width: "90%",
     height: 40,
     backgroundColor: "#007bff",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
+    margin: 10,
   },
   buttonText: {
     color: "#FFFFFF",
@@ -33,6 +39,19 @@ const registerStyle = StyleSheet.create({
   errorText: {
     color: "red",
     marginTop: 10,
+  },
+  backButton: {
+    width: "90%",
+    height: 40,
+    backgroundColor: "#FF5733",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  backButtonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
   },
 });
 
