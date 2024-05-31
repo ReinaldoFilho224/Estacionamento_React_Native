@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const configSty = StyleSheet.create({
+export const stylesConfigs  = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -23,6 +23,40 @@ const configSty = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  itens: {
+    // flexDirection: 'row',
+    // width:'100%',
+    justifyContent: "space-between",
+    marginBottom: 5,
+    gap: 5,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+    padding: 15,
+    alignItems: "flex-start",
+  },
+  formClientContainer: {
+    width: "100%",
+    gap: 10,
+    marginVertical: 15,
+  },
+  formClientLabel: {
+    color: "#fff",
+    fontWeight: "bold",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: 15,
+  },
+  formClientTitle: {
+    color: "#fff",
+    fontSize: 25,
+    fontWeight: "bold",
+  },
+  formClient: {
+    backgroundColor: "#fff",
+    width: "100%",
+    borderRadius: 15,
+    padding: 10,
+  },
 });
-
-export default configSty;

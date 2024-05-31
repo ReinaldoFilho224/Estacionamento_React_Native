@@ -37,7 +37,6 @@ const AddClientsComponent = () => {
     };
     return (
         <View style={stylesConfigs.formClientContainer}>
-            <Text style={stylesConfigs.formClientTitle}>Cadastar Cliente</Text>
             <View>
                 <Text style={stylesConfigs.formClientLabel}>CPF</Text>
                 <TextInput

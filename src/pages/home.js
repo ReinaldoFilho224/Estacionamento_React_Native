@@ -150,10 +150,12 @@ const Home = () => {
                                             modalContent === "config" ? 'Configuração' :
                                                 'Adicionar Cliente'}
                         </Text>
-                        {modalContent === "checkin" &&
+                        {modalContent === "checkin" ?
                             <TouchableOpacity onPress={() => handleModal("addClient")}>
                                 <Icon name="person-add-outline" size={30} color="#fff" />
                             </TouchableOpacity>
+                            :
+                            <View></View>
                         }
                     </View>
                     {renderModalContent()}
