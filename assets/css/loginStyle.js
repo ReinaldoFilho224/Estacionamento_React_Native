@@ -25,9 +25,18 @@ const loginStyle = StyleSheet.create({
     backgroundColor: "#FEFAF6"
   },
   button: {
-    width: '90%',
+    width: '100%',
     height: 40,
     backgroundColor: '#007bff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+    borderRadius:10
+  },
+  button2: {
+    width: '100%',
+    height: 40,
+    backgroundColor: '#ff5733',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
@@ -46,6 +55,12 @@ const loginStyle = StyleSheet.create({
   errorText: {
     color: 'red',
     marginTop: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
 });
 

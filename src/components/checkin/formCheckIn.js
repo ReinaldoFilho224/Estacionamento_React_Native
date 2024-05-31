@@ -7,25 +7,46 @@ import { db } from "../../config";
 import { MaskedTextInput } from "react-native-mask-text";
 import { stylesCheckin } from "../../../assets/css/checkin";
 
-const CheckInForm = ({ onCheckIn, preco_hora }) => {
+const CheckInForm = ({ onCheckIn }) => {
     const [clientes, setClientes] = useState([]);
     const [selectedClienteId, setSelectedClienteId] = useState("");
     const [placa, setPlaca] = useState("");
     const [carModel, setCarModel] = useState("");
     const { refresh, user } = useGlobalState();
     const [isFormValid, setIsFormValid] = useState(false);
+    const [clientCode, setClientCode] = useState('');
 
     const handlePlacaChange = (text) => {
         setPlaca(text.toUpperCase());
     };
 
+    const generateRandomCode = () => {
+        const code = Math.floor(1000 + Math.random() * 9000).toString();
+        return code;
+    };
+
+    const checkCodeExists = async (code) => {
+        const codQuery = query(
+            collection(db, "estacionamento"),
+            where("cod", "==", code),
+            where("park_id", "==", user.uid)
+        );
+        const querySnapshot = await getDocs(codQuery);
+        return !querySnapshot.empty;
+    };
+
+    const handleGenerateUniqueCode = async () => {
+        let newCode = generateRandomCode();
+        while (await checkCodeExists(newCode)) {
+            newCode = generateRandomCode();
+        }
+        // console.log(newCode);
+        setClientCode(newCode);
+    };
+
     useEffect(() => {
         const checkFormValidity = () => {
-            if (placa && carModel && selectedClienteId) {
-                setIsFormValid(true);
-            } else {
-                setIsFormValid(false);
-            }
+            setIsFormValid(placa && carModel && selectedClienteId);
         };
         checkFormValidity();
     }, [placa, carModel, selectedClienteId]);
@@ -50,36 +71,36 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
         };
 
         fetchClientes();
-
     }, [refresh]);
 
-
-    const handleCheckIn = () => {
+    const handleCheckIn = async () => {
         const horaEntrada = new Date();
 
-        if (carModel === undefined || carModel === null) {
-            console.error("carModel não está definido corretamente");
+        if (!carModel) {
+            console.error("Modelo do veículo não está definido corretamente");
             return;
         }
+
+        await handleGenerateUniqueCode();
 
         const formData = {
             clienteId: selectedClienteId,
             horaEntrada,
             placa,
             carModel,
-            status: true,
+            cod: clientCode,
         };
 
         onCheckIn(formData)
             .then(() => {
                 setPlaca('');
                 setCarModel('');
-                setIsFormValid(true)
             })
             .catch((error) => {
                 console.error('Erro ao fazer check-in:', error);
             });
     };
+
     return (
         <View style={stylesCheckin.inputArea}>
             <Image
@@ -87,7 +108,7 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
                 style={stylesCheckin.image}
             />
             <View style={stylesCheckin.inputSelector}>
-                <Text style={stylesCheckin.text} >Cliente: </Text>
+                <Text style={stylesCheckin.text}>Cliente: </Text>
                 <Picker
                     selectedValue={selectedClienteId}
                     onValueChange={(itemValue) => setSelectedClienteId(itemValue)}
@@ -116,7 +137,7 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
             <View style={stylesCheckin.inputSelector}>
                 <Text style={stylesCheckin.text}>Modelo do Veículo:</Text>
                 <TextInput
-                    value={preco_hora}
+                    value={carModel}
                     onChangeText={setCarModel}
                     placeholder="Modelo do Veículo"
                     style={stylesCheckin.input}

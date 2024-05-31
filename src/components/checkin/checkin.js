@@ -24,7 +24,8 @@ const CheckInPage = () => {
           hora_entrada: Timestamp.fromDate(formData.horaEntrada),
           placa: formData.placa,
           preco_hora: parkConfigs.preco_hora,
-          status: true
+          cod: formData.cod,
+          modelo: formData.carModel
         });
         alert("Check-In realizado com sucesso!");
       } else {
