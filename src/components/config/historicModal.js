@@ -1,7 +1,8 @@
-import { View, Text, ScrollView, TouchableOpacity, Modal, Button } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Modal, Button, TouchableHighlight } from "react-native";
 import { useState, useEffect } from "react";
 import { db } from "../../config";
 import { stylesConfigs } from "../../../assets/css/configSty";
+import { stylesDetails } from "../../../assets/css/detailsStyle"; 
 import { collection, getDocs, getDoc, where, query, doc } from "firebase/firestore";
 import { useGlobalState } from "../../config/refresh";
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -94,7 +95,7 @@ const HistoricComponent = () => {
     }, []);
 
     return (
-        <ScrollView style={{ width: "100%" }}>
+        <ScrollView style={stylesDetails.container}>
             {isLoading &&
                 <Spinner
                     visible={isLoading}
@@ -106,23 +107,23 @@ const HistoricComponent = () => {
                 <TouchableOpacity
                     onPress={() => openModal(clients[index], itemHistoric)}
                     key={index}
-                    style={stylesConfigs.itensHistorico}
+                    style={stylesDetails.itemHistorico}
                 >
                     <View>
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
-                            <Text style={{ fontWeight: "bold" }}>
+                            <Text style={stylesDetails.itemText}>
                                 Cliente:
                             </Text>
                             <Text>{clients.length != 0 ? ` ${clients[index].nome}` : ''}</Text>
                         </View>
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
-                            <Text style={{ fontWeight: "bold" }}>
+                            <Text style={stylesDetails.itemText}>
                                 Placa:
                             </Text>
                             <Text>{` ${itemHistoric.placa}`}</Text>
                         </View>
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
-                            <Text style={{ fontWeight: "bold" }}>
+                            <Text style={stylesDetails.itemText}>
                                 Data:
                             </Text>
                             <Text>{` ${itemHistoric.entrada}`}</Text>
@@ -142,20 +143,26 @@ const HistoricComponent = () => {
                 transparent={true}
                 onRequestClose={closeModal}
             >
-                <View style={stylesConfigs.modalOverlay}>
-                    <View style={stylesConfigs.modalContent}>
-                        <Text style={stylesConfigs.modalTitle}>Detalhes</Text>
+                <View style={stylesDetails.modalOverlay}>
+                    <View style={stylesDetails.modalContent}>
+                        <Text style={stylesDetails.modalTitle}>Detalhes</Text>
                         {selectedClient && (
                             <>
-                                <Text>Nome do Cliente: {selectedClient.nome}</Text>
-                                <Text>CPF do Cliente: {selectedClient.cpf}</Text>
-                                <Text>Telefone do Cliente: {selectedClient.telefone}</Text>
-                                <Text>Placa do Veículo: {item.placa}</Text>
-                                <Text>Hora de Entrada: {item.entrada}</Text>
-                                <Text>Hora de saida: {item.saida}</Text>
+                                <Text style={stylesDetails.modalText}>Nome do Cliente: {selectedClient.nome}</Text>
+                                <Text style={stylesDetails.modalText}>CPF do Cliente: {selectedClient.cpf}</Text>
+                                <Text style={stylesDetails.modalText}>Telefone do Cliente: {selectedClient.telefone}</Text>
+                                <Text style={stylesDetails.modalText}>Placa do Veículo: {item.placa}</Text>
+                                <Text style={stylesDetails.modalText}>Hora de Entrada: {item.entrada}</Text>
+                                <Text style={stylesDetails.modalText}>Hora de saida: {item.saida}</Text>
                             </>
                         )}
-                        <Button title="Fechar" onPress={closeModal} />
+                        <TouchableHighlight
+                            style={stylesDetails.closeButton}
+                            onPress={closeModal}
+                            underlayColor="#1E88E5"
+                        >
+                            <Text style={stylesDetails.closeButtonText}>Fechar</Text>
+                        </TouchableHighlight>
                     </View>
                 </View>
             </Modal>
