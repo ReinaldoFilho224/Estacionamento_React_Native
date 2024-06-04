@@ -11,6 +11,7 @@ import { db } from "../config";
 import { getDocs, collection, query, where } from "firebase/firestore";
 import { useGlobalState } from "../config/refresh";
 import ViewClientsComponent from "../components/config/viewClientsModal";
+import HistoricComponent from "../components/config/historicModal";
 import Config from "./config";
 
 const Home = () => {
@@ -34,7 +35,7 @@ const Home = () => {
             case "listClient":
                 return <ViewClientsComponent />;
             case "history":
-                return <ViewClientsComponent />;
+                return <HistoricComponent />;
             case "config":
                 return <Config />;
             default:
@@ -136,7 +137,7 @@ const Home = () => {
             <Modal
                 isVisible={isModalVisible}
                 onBackdropPress={() => setModalVisible(false)}
-                style={{ justifyContent: 'flex-end', margin: 0 }}
+                style={{ justifyContent: 'flex-end', margin: 0, height:'100%'}}
             >
                 <View style={styles.modalContent}>
                     <View style={styles.headerModal}>

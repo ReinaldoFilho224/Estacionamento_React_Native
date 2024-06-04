@@ -26,6 +26,23 @@ export const stylesConfigs  = StyleSheet.create({
   itens: {
     // flexDirection: 'row',
     // width:'100%',
+    // display:'flex',
+    // flexDirection:'row',
+    justifyContent: "space-between",
+    marginBottom: 5,
+    gap: 5,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+    margin: 10,
+    padding: 15,
+    alignItems: "flex-start",
+  },
+  itensHistorico: {
+    // flexDirection: 'row',
+    // width:'100%',
+    display:'flex',
+    flexDirection:'row',
     justifyContent: "space-between",
     marginBottom: 5,
     gap: 5,
@@ -59,4 +76,25 @@ export const stylesConfigs  = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
   },
+
+
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+},
+modalContent: {
+    width: '100%',
+    height:"100%",
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+},
+modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+},
 });
