@@ -20,6 +20,7 @@ const ListCheckout = () => {
 
     useEffect(() => {
         const fetchDataAndSetTimer = async () => {
+            park.length === 0? setIsLoading(true) : setIsLoading(false)
             try {
                 setIsLoading(true);
                 const estacionamentoQuery = query(
@@ -62,6 +63,7 @@ const ListCheckout = () => {
                         };
                     }));
                     setPark(updatedTimes);
+                    setIsLoading(false);
                 } else {
                     console.log("Nenhum carro estacionado encontrado.");
                 }
@@ -81,14 +83,14 @@ const ListCheckout = () => {
 
     return (
         <ScrollView contentContainerStyle={stylesCheckout.container}>
-            {isLoading ? (
+            {isLoading && (
                 <Spinner
                     visible={isLoading}
                     textContent={'Carregando...'}
                     textStyle={{ color: '#FFF' }}
                     overlayColor={'rgba(0, 0, 0, 0.7)'}
-                />
-            ) : (
+                />)}
+
                 <View style={stylesCheckout.checkoutView}>
                     {park.length > 0 ? park.map((car, index) => (
                         <List.Accordion
@@ -105,7 +107,6 @@ const ListCheckout = () => {
                         </View>
                     }
                 </View>
-            )}
         </ScrollView>
     );
 };
