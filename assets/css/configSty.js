@@ -7,6 +7,10 @@ export const stylesConfigs  = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
   },
+  containerConfig: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
   text: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -18,10 +22,17 @@ export const stylesConfigs  = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
   },
+  buttonCreated: {
+    backgroundColor: 'green', 
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
   buttonText: {
     color: '#ffffff', 
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   itens: {
     // flexDirection: 'row',
@@ -54,16 +65,20 @@ export const stylesConfigs  = StyleSheet.create({
     alignItems: "flex-start",
   },
   formClientContainer: {
+    display:'flex',
     width: "100%",
-    gap: 10,
+    gap:0,
+    marginVertical: 15,
+  },
+  formInput: {
+    display:'flex',
+    width: "100%",
+    gap: 8,
     marginVertical: 15,
   },
   formClientLabel: {
-    color: "#fff",
-    fontWeight: "bold",
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: 15,
+    color:'#fff',
+    fontSize: 18,
   },
   formClientTitle: {
     color: "#fff",

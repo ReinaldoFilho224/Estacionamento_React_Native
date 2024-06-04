@@ -5,6 +5,7 @@ import Home from './src/pages/home';
 import Config from './src/pages/config';
 import LoginScreen from './src/components/auth/login';
 import RegisterScreen from './src/components/auth/register';
+import Perfil from './src/pages/perfil';
 import { GlobalStateProvider } from './src/config/refresh';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { auth } from './src/config';
@@ -69,12 +70,13 @@ const App = () => {
                 backgroundColor: '#fff',
                 borderTopWidth: 0,
                 elevation: 0,
+                display: 'none'
               },
             })}
           >
             <Tab.Screen name="Caixa" component={Config} options={{ tabBarLabel: 'Caixa', tabBarIcon: ({ color, size }) => (<Icon name="cash-outline" size={size} color={color} />) }} />
             <Tab.Screen name="E-Park Manager" component={Home} options={{ tabBarLabel: 'E-Park', tabBarIcon: ({ color, size }) => (<Icon name="home-outline" size={size} color={color} />) }} />
-            <Tab.Screen name="Perfil" component={Config} options={{ tabBarLabel: 'Perfil', tabBarIcon: ({ color, size }) => (<Icon name="person-circle-outline" size={size} color={color} />) }} />
+            <Tab.Screen name="Perfil" component={Perfil} options={{ tabBarLabel: 'Perfil', tabBarIcon: ({ color, size }) => (<Icon name="person-circle-outline" size={size} color={color} />) }} />
           </Tab.Navigator>
         </NavigationContainer>
       </GestureHandlerRootView>

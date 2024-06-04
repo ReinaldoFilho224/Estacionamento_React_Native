@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { collection, addDoc } from 'firebase/firestore';
 import { useGlobalState } from '../../config/refresh';
 import { db } from '../../config';
 import { stylesConfigs } from '../../../assets/css/configSty';
+import { stylesCheckin } from '../../../assets/css/checkin';
 
 const AddClientsComponent = () => {
     const [cpf, setCpf] = useState('');
     const [nome, setNome] = useState('');
     const [telefone, setTelefone] = useState('');
-    const {refresh, setRefresh, user} = useGlobalState();
+    const { refresh, setRefresh, user } = useGlobalState();
 
     const handleCreateClient = async () => {
         try {
@@ -21,13 +22,13 @@ const AddClientsComponent = () => {
                 cpf,
                 nome,
                 telefone,
-                park_id:user.uid
+                park_id: user.uid
             });
             setCpf('');
             setNome('');
             setTelefone('');
             setRefresh(!refresh)
-            
+
 
             Alert.alert('Sucesso', 'Cliente criado com sucesso!');
         } catch (error) {
@@ -37,36 +38,40 @@ const AddClientsComponent = () => {
     };
     return (
         <View style={stylesConfigs.formClientContainer}>
-            <View>
-                <Text style={stylesConfigs.formClientLabel}>CPF</Text>
+            <View style={stylesConfigs.formInput}>
+                <Text style={stylesConfigs.formClientLabel}>CPF:</Text>
                 <TextInput
                     value={cpf}
                     onChangeText={setCpf}
                     placeholder="000.000.000-00"
                     keyboardType="numeric"
-                    style={stylesConfigs.formClient}
+                    style={stylesCheckin.input}
                 />
             </View>
-            <View>
-                <Text style={stylesConfigs.formClientLabel}>Nome</Text>
+            <View style={stylesConfigs.formInput}>
+
+                <Text style={stylesConfigs.formClientLabel}>Nome:</Text>
                 <TextInput
                     value={nome}
                     onChangeText={setNome}
                     placeholder="Nome do cliente"
-                    style={stylesConfigs.formClient}
+                    style={stylesCheckin.input}
                 />
             </View>
-            <View>
-                <Text style={stylesConfigs.formClientLabel}>Telefone</Text>
+            <View style={stylesConfigs.formInput}>
+
+                <Text style={stylesConfigs.formClientLabel}>Telefone:</Text>
                 <TextInput
                     value={telefone}
                     onChangeText={setTelefone}
                     placeholder="(00) 00000-0000"
                     keyboardType="numeric"
-                    style={stylesConfigs.formClient}
+                    style={stylesCheckin.input}
                 />
             </View>
-            <Button title="Criar Cliente" onPress={handleCreateClient} />
+            <TouchableOpacity style={stylesConfigs.buttonCreated} onPress={handleCreateClient}>
+                <Text style={stylesConfigs.buttonText}>Criar Cliente</Text>
+            </TouchableOpacity>
         </View>
     )
 }

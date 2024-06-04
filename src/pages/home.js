@@ -13,6 +13,9 @@ import { useGlobalState } from "../config/refresh";
 import ViewClientsComponent from "../components/config/viewClientsModal";
 import HistoricComponent from "../components/config/historicModal";
 import Config from "./config";
+import { auth } from "../config";
+import { signOut } from 'firebase/auth';
+
 
 const Home = () => {
     const { isModalVisible, setModalVisible } = useGlobalState();
@@ -42,6 +45,16 @@ const Home = () => {
                 return null;
         }
     };
+
+     const handleSignOut = () => {
+        signOut(auth)
+          .then(() => {
+            console.log('Usuário desconectado');
+          })
+          .catch((error) => {
+            console.error('Erro ao desconectar:', error);
+          });
+      };
 
     useEffect(() => {
         const fetchDataAndSetTimer = async () => {
@@ -95,7 +108,7 @@ const Home = () => {
 
                         <ButtonMenu
                             functionModal={() => handleModal("checkout")}
-                            icon="log-out-outline"
+                            icon="remove-circle-outline"
                             iconColor="red"
                             textButton="Realizar Checkout"
                         />
@@ -130,6 +143,16 @@ const Home = () => {
                             icon="settings-outline"
                             iconColor="#102C57"
                             textButton="Configuração"
+                        />
+                    </View>
+                </View>
+                <View style={styles.lineMenu}>
+                    <View style={styles.menuArea}>
+                        <ButtonMenu
+                            functionModal={handleSignOut}
+                            icon="log-out-outline"
+                            iconColor="red"
+                            textButton="Fazer Logout"
                         />
                     </View>
                 </View>
