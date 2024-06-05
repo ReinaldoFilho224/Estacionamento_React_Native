@@ -3,9 +3,9 @@ import { StyleSheet } from "react-native";
 export const stylesConfigs = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ffffff",
   },
   text: {
     fontSize: 20,
@@ -13,7 +13,7 @@ export const stylesConfigs = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#ff5733', 
+    backgroundColor: "#ff5733",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -22,7 +22,7 @@ export const stylesConfigs = StyleSheet.create({
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "bold",
-    textAlign:'center'
+    textAlign: "center",
   },
   itens: {
     // flexDirection: 'row',
@@ -55,19 +55,18 @@ export const stylesConfigs = StyleSheet.create({
     alignItems: "flex-start",
   },
   formClientContainer: {
-    display:'flex',
+    display: "flex",
     width: "100%",
-    gap:0,
+    gap: 0,
     marginVertical: 15,
   },
   formInput: {
-    display:'flex',
+    display: "flex",
     width: "100%",
-    gap: 8,
-    marginVertical: 15,
+    gap: 10,
   },
   formClientLabel: {
-    color:'#fff',
+    color: "#fff",
     fontSize: 18,
   },
   formClientTitle: {
@@ -82,7 +81,7 @@ export const stylesConfigs = StyleSheet.create({
     padding: 10,
   },
   buttonCreated: {
-    backgroundColor: 'green', 
+    backgroundColor: "green",
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
@@ -90,7 +89,7 @@ export const stylesConfigs = StyleSheet.create({
 
   containerConfig: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 
   modalOverlay: {
