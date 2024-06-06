@@ -127,7 +127,7 @@ export const stylesConfigs = StyleSheet.create({
   cardInfoHistoricoHighlight: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#1C1C1C", // Você pode alterar esta cor para qualquer outra cor que destaque o texto
+    color: "#1C1C1C",
   },
   searchInput: {
     marginTop: 20,
@@ -138,5 +138,18 @@ export const stylesConfigs = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 20,
     backgroundColor: "#FFF",
+  },
+  sectionTitle:{
+    color:'#fff',
+    textAlign:'center',
+    fontSize:22,
+    marginBottom:15,
+    // backgroundColor:'gray',
+    width:'100%'
+  },
+  section:{
+    borderBottomColor: '#fff',
+    borderBottomWidth: 1,
+    marginVertical: 10,
   },
 });
