@@ -154,4 +154,13 @@ export const stylesCheckout = StyleSheet.create({
     fontSize: 16,
     color: '#777',
   },
+  searchBar: {
+    height: 40,
+    backgroundColor: '#fff',
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginVertical: 10,
+},
 });

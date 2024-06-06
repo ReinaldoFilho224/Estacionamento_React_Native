@@ -1,14 +1,21 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { db } from "../../config";
-import { stylesConfigs  } from "../../../assets/css/configSty";
+import { stylesConfigs } from "../../../assets/css/configSty";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import { useGlobalState } from "../../config/refresh";
 
 const ViewClientsComponent = () => {
   const [clients, setClients] = useState([]);
-  const {user} = useGlobalState()
-
+  const [filteredClients, setFilteredClients] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const { user } = useGlobalState();
 
   useEffect(() => {
     const fetchDataAndSetTimer = async () => {
@@ -24,6 +31,7 @@ const ViewClientsComponent = () => {
           ...doc.data(),
         }));
         setClients(clientsData);
+        setFilteredClients(clientsData);
       } catch (error) {
         console.error("Erro ao buscar carros estacionados:", error);
       }
@@ -36,10 +44,24 @@ const ViewClientsComponent = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const filtered = clients.filter(
+      (client) =>
+        client.nome.toLowerCase().includes(searchText.toLowerCase()) ||
+        client.cpf.includes(searchText)
+    );
+    setFilteredClients(filtered);
+  }, [searchText, clients]);
+
   return (
     <ScrollView style={{ width: "100%" }}>
-
-      {clients.map((client, index) => (
+      <TextInput
+        style={stylesConfigs.searchInput}
+        placeholder="Filtrar por CPF ou Cliente"
+        value={searchText}
+        onChangeText={(text) => setSearchText(text)}
+      />
+      {filteredClients.map((client, index) => (
         <TouchableOpacity
           onPress={() =>
             alert("Abrir tela de edição aqui para a cliente " + client.nome)
