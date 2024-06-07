@@ -1,4 +1,3 @@
-// loginStyle.js
 import { StyleSheet } from 'react-native';
 
 const loginStyle = StyleSheet.create({
@@ -24,6 +23,24 @@ const loginStyle = StyleSheet.create({
     borderRadius:10,
     backgroundColor: "#FEFAF6"
   },
+  passwordContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEFAF6',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 16,
+  },
+  inputPassword: {
+    flex: 1,
+    height: 40,
+    paddingLeft: 8,
+  },
+  eyeIcon: {
+    padding: 10,
+  },
   button: {
     width: '100%',
     height: 40,
@@ -37,12 +54,10 @@ const loginStyle = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-
   registerText: {
     color: "#FEFAF6",
     fontSize: 15,
   },
-  
   errorText: {
     color: 'red',
     marginTop: 8,
