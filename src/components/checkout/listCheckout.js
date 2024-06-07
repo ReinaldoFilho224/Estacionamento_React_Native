@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TextInput } from "react-native";
 import { collection, getDocs, getDoc, doc, query, where } from "firebase/firestore";
 import { stylesCheckout } from "../../../assets/css/checkout";
 import { CheckoutModal } from "./checkoutModal";
@@ -13,6 +13,7 @@ const ListCheckout = () => {
     const [isLoading, setIsLoading] = useState(true);
     const { refresh, user, setVagasOcup } = useGlobalState();
     const [expanded, setExpanded] = useState(-1);
+    const [searchText, setSearchText] = useState('');
 
     function adicionarZero(numero) {
         return numero < 10 ? `0${numero}` : numero;
@@ -20,7 +21,7 @@ const ListCheckout = () => {
 
     useEffect(() => {
         const fetchDataAndSetTimer = async () => {
-            park.length === 0? setIsLoading(true) : setIsLoading(false)
+            park.length === 0 ? setIsLoading(true) : setIsLoading(false)
             try {
                 setIsLoading(true);
                 const estacionamentoQuery = query(
@@ -81,6 +82,9 @@ const ListCheckout = () => {
         return () => clearInterval(timer);
     }, [refresh]);
 
+    // Filtrando a lista de veículos com base na pesquisa
+    const filteredPark = park.filter(car => car.placa.toLowerCase().includes(searchText.toLowerCase()));
+
     return (
         <ScrollView contentContainerStyle={stylesCheckout.container}>
             {isLoading && (
@@ -89,24 +93,32 @@ const ListCheckout = () => {
                     textContent={'Carregando...'}
                     textStyle={{ color: '#FFF' }}
                     overlayColor={'rgba(0, 0, 0, 0.7)'}
-                />)}
+                />
+            )}
 
-                <View style={stylesCheckout.checkoutView}>
-                    {park.length > 0 ? park.map((car, index) => (
-                        <List.Accordion
-                            title={`${car.placa} - ${car.difTime}`}
-                            expanded={expanded === index}
-                            onPress={() => setExpanded(expanded === index ? -1 : index)}
-                            key={index}
-                        >
-                            <CheckoutModal document={car} />
-                        </List.Accordion>
-                    )) :
-                        <View style={stylesCheckout.textView}>
-                            <Text style={stylesCheckout.text}>Nenhum veículo estacionado</Text>
-                        </View>
-                    }
-                </View>
+            <TextInput
+                style={stylesCheckout.searchBar}
+                placeholder="Pesquisar por placa"
+                value={searchText}
+                onChangeText={setSearchText}
+            />
+
+            <View style={stylesCheckout.checkoutView}>
+                {filteredPark.length > 0 ? filteredPark.map((car, index) => (
+                    <List.Accordion
+                        title={`${car.placa} - ${car.difTime}`}
+                        expanded={expanded === index}
+                        onPress={() => setExpanded(expanded === index ? -1 : index)}
+                        key={index}
+                    >
+                        <CheckoutModal document={car} />
+                    </List.Accordion>
+                )) :
+                    <View style={stylesCheckout.textView}>
+                        <Text style={stylesCheckout.text}>Nenhum veículo estacionado</Text>
+                    </View>
+                }
+            </View>
         </ScrollView>
     );
 };
