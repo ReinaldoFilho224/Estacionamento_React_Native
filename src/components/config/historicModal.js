@@ -6,7 +6,9 @@ import {
   Modal,
   Button,
   TouchableHighlight,
+  TextInput,
 } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import { useState, useEffect } from "react";
 import { db } from "../../config";
 import { stylesConfigs } from "../../../assets/css/configSty";
@@ -22,14 +24,24 @@ import {
 import { useGlobalState } from "../../config/refresh";
 import Spinner from "react-native-loading-spinner-overlay";
 import { timeConverter } from "../../utils/timeConverter";
+import {
+  getStartOfDay,
+  getStartOfLast7Days,
+  getStartOfSpecificDay,
+} from "../../utils/dateUtils";
 
 const HistoricComponent = () => {
   const [historic, setHistoric] = useState([]);
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState({});
   const [item, setItem] = useState([]);
   const [isLoading, setIsLoading] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [searchDate, setSearchDate] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [filteredHistoric, setFilteredHistoric] = useState([]);
+  const [hasFilteredResults, setHasFilteredResults] = useState(true);
   const { user } = useGlobalState();
 
   const openModal = (client, item) => {
@@ -43,9 +55,40 @@ const HistoricComponent = () => {
     setSelectedClient(null);
   };
 
+  const applyFilter = (data) => {
+    const now = new Date();
+    let filteredData = data;
+
+    if (filter === "today") {
+      const startOfDay = getStartOfDay(now);
+      filteredData = data.filter((item) => item.hora_entrada.seconds >= startOfDay.getTime() / 1000);
+    } else if (filter === "last7Days") {
+      const startOfLast7Days = getStartOfLast7Days(now);
+      filteredData = data.filter((item) => item.hora_entrada.seconds >= startOfLast7Days.getTime() / 1000);
+    } else if (filter === "specificDay" && searchDate) {
+      const startOfSpecificDay = getStartOfSpecificDay(new Date(searchDate));
+      const endOfSpecificDay = new Date(startOfSpecificDay);
+      endOfSpecificDay.setDate(endOfSpecificDay.getDate() + 1);
+      filteredData = data.filter(
+        (item) =>
+          item.hora_entrada.seconds >= startOfSpecificDay.getTime() / 1000 &&
+          item.hora_entrada.seconds < endOfSpecificDay.getTime() / 1000
+      );
+    }
+
+    if (searchText) {
+      filteredData = filteredData.filter((item) =>
+        item.placa.includes(searchText) ||
+        clients[item.cliente_id]?.nome.includes(searchText)
+      );
+    }
+
+    return filteredData;
+  };
+
   useEffect(() => {
     const fetchDataAndSetTimer = async () => {
-      clients.length === 0 ? setIsLoading(true) : setIsLoading(false);
+      setIsLoading(true);
       try {
         const historicQuery = query(
           collection(db, "historico"),
@@ -57,9 +100,21 @@ const HistoricComponent = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        if (historicData.length > 0) {
+
+        const clientIds = [...new Set(historicData.map(item => item.cliente_id))];
+        let clientsInfos = {};
+        for (const clientId of clientIds) {
+          const clientDocRef = doc(db, "clientes", clientId);
+          const clientDoc = await getDoc(clientDocRef);
+          if (clientDoc.exists()) {
+            clientsInfos[clientId] = { id: clientDoc.id, ...clientDoc.data() };
+          }
+        }
+
+        const filteredData = applyFilter(historicData);
+        if (filteredData.length > 0) {
           const updatedTimes = await Promise.all(
-            historicData.map(async (documento) => {
+            filteredData.map(async (documento) => {
               const Entrada = timeConverter(documento.hora_entrada.seconds);
               const saida = timeConverter(documento.hora_saida.seconds);
               return {
@@ -69,31 +124,19 @@ const HistoricComponent = () => {
               };
             })
           );
-          setHistoric(updatedTimes);
-          setIsLoading(false);
+          setFilteredHistoric(updatedTimes);
+          setHasFilteredResults(true);
+        } else {
+          setFilteredHistoric([]);
+          setHasFilteredResults(false);
         }
 
-        let listClients = [];
-        historicData.forEach((itemHistoric) => {
-          listClients.push(itemHistoric.cliente_id);
-        });
-
-        let clientsInfos = [];
-        for (const client of listClients) {
-          const clientDocRef = doc(db, "clientes", client);
-          const clientDoc = await getDoc(clientDocRef);
-          if (clientDoc.exists()) {
-            clientsInfos.push({
-              id: clientDoc.id,
-              ...clientDoc.data(),
-            });
-          }
-        }
-
+        setHistoric(historicData);
         setClients(clientsInfos);
         setIsLoading(false);
       } catch (error) {
         console.error("Erro ao buscar histórico:", error);
+        setIsLoading(false);
       }
     };
 
@@ -102,47 +145,60 @@ const HistoricComponent = () => {
     const timer = setInterval(fetchDataAndSetTimer, 10000000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [filter, searchDate, searchText]);
 
   return (
     <ScrollView style={stylesDetails.container}>
-      {isLoading && (
-        <Spinner
-          visible={isLoading}
-          textContent={"Carregando..."}
-          textStyle={{ color: "#FFF" }}
-          overlayColor={"#000"}
+      <View>
+
+        <TextInput
+          style={stylesDetails.searchBar}
+          placeholder="Pesquisar por nome ou placa"
+          value={searchText}
+          onChangeText={setSearchText}
         />
+      </View>
+
+      <View style={stylesDetails.filterContainer}>
+        <Button title="Todos" onPress={() => setFilter("all")} />
+        <Button title="Hoje" onPress={() => setFilter("today")} />
+        <Button title="Últimos 7 Dias" onPress={() => setFilter("last7Days")} />
+      </View>
+
+      {filteredHistoric.length === 0 && hasFilteredResults === false ? (
+        <Text style={{color:'#fff'}}>Não há registros para a data selecionada.</Text>
+      ) : (
+        filteredHistoric.map((itemHistoric, index) => {
+          const client = clients[itemHistoric.cliente_id];
+          return (
+            <TouchableOpacity
+              onPress={() => openModal(client, itemHistoric)}
+              key={index}
+              style={stylesDetails.itemHistorico}
+            >
+              <View>
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                  <Text style={stylesDetails.itemText}>Cliente:</Text>
+                  <Text>{client ? ` ${client.nome}` : ""}</Text>
+                </View>
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                  <Text style={stylesDetails.itemText}>Placa:</Text>
+                  <Text>{` ${itemHistoric.placa}`}</Text>
+                </View>
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                  <Text style={stylesDetails.itemText}>Data:</Text>
+                  <Text>{` ${itemHistoric.entrada}`}</Text>
+                </View>
+              </View>
+              <View>
+                <Text></Text>
+                <Text>Detalhes</Text>
+                <Text></Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })
       )}
-      {historic.map((itemHistoric, index) => (
-        <TouchableOpacity
-          onPress={() => openModal(clients[index], itemHistoric)}
-          key={index}
-          style={stylesDetails.itemHistorico}
-        >
-          <View>
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              <Text style={stylesDetails.itemText}>Cliente:</Text>
-              <Text>
-                {clients.length != 0 ? ` ${clients[index].nome}` : ""}
-              </Text>
-            </View>
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              <Text style={stylesDetails.itemText}>Placa:</Text>
-              <Text>{` ${itemHistoric.placa}`}</Text>
-            </View>
-            <View style={{ display: "flex", flexDirection: "row" }}>
-              <Text style={stylesDetails.itemText}>Data:</Text>
-              <Text>{` ${itemHistoric.entrada}`}</Text>
-            </View>
-          </View>
-          <View>
-            <Text></Text>
-            <Text>Detalhes</Text>
-            <Text></Text>
-          </View>
-        </TouchableOpacity>
-      ))}
 
       <Modal
         visible={modalVisible}
@@ -171,7 +227,7 @@ const HistoricComponent = () => {
                   Hora de Entrada: {item.entrada}
                 </Text>
                 <Text style={stylesDetails.modalText}>
-                  Hora de saida: {item.saida}
+                  Hora de Saída: {item.saida}
                 </Text>
               </>
             )}

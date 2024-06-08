@@ -59,6 +59,15 @@ export const stylesDetails = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
   },
+  searchBar: {
+    height: 40,
+    backgroundColor: '#fff',
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginVertical: 10,
+},
 });
 
 export default stylesDetails;

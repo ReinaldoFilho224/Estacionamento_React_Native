@@ -13,10 +13,12 @@ import { useGlobalState } from "../config/refresh";
 import ViewClientsComponent from "../components/config/viewClientsModal";
 import HistoricComponent from "../components/config/historicModal";
 import Config from "./config";
+import Saldo from "../components/config/saldo";
 import { auth } from "../config";
 import { signOut } from "firebase/auth";
 
 const Home = () => {
+  const [vagasOcupadas, setVagasOcupadas] = useState(0);
   const { isModalVisible, setModalVisible } = useGlobalState();
   const [modalContent, setModalContent] = useState(null);
   const { refresh, setRefresh, user, setParkConfigs, parkConfigs } =
@@ -41,6 +43,8 @@ const Home = () => {
         return <HistoricComponent />;
       case "config":
         return <Config />;
+      case "saldo":
+        return <Saldo />;
       default:
         return null;
     }
@@ -69,6 +73,18 @@ const Home = () => {
           id: doc.id,
           ...doc.data(),
         }));
+        const ParkQuery = query(
+          collection(db, "estacionamento"),
+          where("park_id", "==", user.uid)
+        );
+
+        const ParkSnapshot = await getDocs(ParkQuery);
+        const parkData = ParkSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setVagasOcupadas(parkData.length)
 
         if (configsData.length > 0) {
           setParkConfigs(configsData[0]);
@@ -95,6 +111,9 @@ const Home = () => {
             style: "currency",
             currency: "BRL",
           })}`}</Text>
+          <Text
+            style={styles.textSmall}
+          >{`Vagas Disponiveis:  ${vagasOcupadas}/${parkConfigs.vagas_dis}`}</Text>
         </View>
         <View>
           <Image
@@ -156,6 +175,12 @@ const Home = () => {
         <View style={styles.lineMenu}>
           <View style={styles.menuArea}>
             <ButtonMenu
+              functionModal={() => handleModal("saldo")}
+              icon="stats-chart-outline"
+              iconColor="orange"
+              textButton="Saldo"
+            />
+            <ButtonMenu
               functionModal={handleSignOut}
               icon="log-out-outline"
               iconColor="red"
@@ -185,6 +210,8 @@ const Home = () => {
                 ? "Historico"
                 : modalContent === "config"
                 ? "Configuração"
+                : modalContent === "saldo"
+                ? "Saldo"
                 : "Adicionar Cliente"}
             </Text>
             {modalContent === "checkin" ? (
