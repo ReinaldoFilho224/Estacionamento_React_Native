@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
-import { auth } from '../../config';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../config';
 import loginStyle from '../../../assets/css/loginStyle'; 
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const handleLogin = () => {
@@ -34,13 +36,21 @@ const LoginScreen = ({ navigation }) => {
         keyboardType="email-address"
         autoCapitalize="none"
       />
-      <TextInput
-        style={loginStyle.input} 
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      <View style={loginStyle.passwordContainer}>
+        <TextInput
+          style={loginStyle.inputPassword} 
+          placeholder="Senha"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!showPassword}
+        />
+        <TouchableOpacity
+          style={loginStyle.eyeIcon}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          <Icon name={showPassword ? 'eye' : 'eye-off'} size={24} color="#666" />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity style={loginStyle.button} onPress={handleLogin}>
         <Text style={loginStyle.buttonText}>ENTRAR</Text>
       </TouchableOpacity>
