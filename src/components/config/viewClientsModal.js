@@ -10,11 +10,14 @@ import { db } from "../../config";
 import { stylesConfigs } from "../../../assets/css/configSty";
 import { collection, getDocs, where, query } from "firebase/firestore";
 import { useGlobalState } from "../../config/refresh";
+import EditClientsModal from "./editClientsModal";
 
 const ViewClientsComponent = () => {
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [clientSelect, setClientSelected] = useState([]);
   const { user } = useGlobalState();
 
   useEffect(() => {
@@ -63,9 +66,10 @@ const ViewClientsComponent = () => {
       />
       {filteredClients.map((client, index) => (
         <TouchableOpacity
-          onPress={() =>
-            alert("Abrir tela de edição aqui para a cliente " + client.nome)
-          }
+          onPress={() => {
+            setShowModalEdit(true);
+            setClientSelected(client);
+          }}
           key={index}
           style={stylesConfigs.itens}
         >
@@ -87,6 +91,12 @@ const ViewClientsComponent = () => {
           </Text>
         </TouchableOpacity>
       ))}
+
+      <EditClientsModal
+        show={showModalEdit}
+        close={() => setShowModalEdit(false)}
+        client={clientSelect}
+      />
     </ScrollView>
   );
 };
