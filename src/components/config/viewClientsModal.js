@@ -18,7 +18,7 @@ const ViewClientsComponent = () => {
   const [searchText, setSearchText] = useState("");
   const [showModalEdit, setShowModalEdit] = useState(false);
   const [clientSelect, setClientSelected] = useState([]);
-  const { user } = useGlobalState();
+  const { user, refresh, setRefresh } = useGlobalState();
 
   useEffect(() => {
     const fetchDataAndSetTimer = async () => {
@@ -45,7 +45,7 @@ const ViewClientsComponent = () => {
     const timer = setInterval(fetchDataAndSetTimer, 10000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
     const filtered = clients.filter(
@@ -84,10 +84,6 @@ const ViewClientsComponent = () => {
           <Text>
             <Text style={{ fontWeight: "bold" }}>Tel.: </Text>
             {client.telefone}
-          </Text>
-          <Text>
-            <Text style={{ fontWeight: "bold" }}>Última Visita: </Text>
-            XX/XX/XXXX
           </Text>
         </TouchableOpacity>
       ))}

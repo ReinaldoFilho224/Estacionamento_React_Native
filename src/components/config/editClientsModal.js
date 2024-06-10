@@ -7,7 +7,7 @@ import {
   Alert,
   Modal,
 } from "react-native";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";  // Importar updateDoc e doc
 import { useGlobalState } from "../../config/refresh";
 import { db } from "../../config";
 import { stylesConfigs } from "../../../assets/css/configSty";
@@ -18,6 +18,7 @@ const EditClientsModal = ({ show, close, client }) => {
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
+  const {setRefresh, refresh} = useGlobalState()
 
   useEffect(() => {
     if (client) {
@@ -28,29 +29,22 @@ const EditClientsModal = ({ show, close, client }) => {
   }, [client]);
 
   const handleCreateClient = async () => {
-    alert("Realizar lógica para salvar a edição no id do cliente informado");
-    // try {
-    //   if (!cpf || !nome || !telefone) {
-    //     Alert.alert("Erro", "Por favor, preencha todos os campos");
-    //     return;
-    //   }
-    //   await addDoc(collection(db, "clientes"), {
-    //     cpf,
-    //     nome,
-    //     telefone,
-    //     park_id: user.uid,
-    //   });
-    //   setCpf("");
-    //   setNome("");
-    //   setTelefone("");
-    //   setRefresh(!refresh);
+    try {
+      // Atualizar o cliente existente no Firestore
+      const clientRef = doc(db, "clientes", client.id);
+      await updateDoc(clientRef, {
+        cpf,
+        nome,
+        telefone,
+      });
+      setRefresh(!refresh);
 
-    //   Alert.alert("Sucesso", "Cliente editado com sucesso!");
-    //   close(); //
-    // } catch (error) {
-    //   console.error("Erro ao criar cliente:", error);
-    //   Alert.alert("Erro", "Erro ao criar cliente. Por favor, tente novamente.");
-    // }
+      Alert.alert("Sucesso", "Cliente editado com sucesso!");
+      close();
+    } catch (error) {
+      console.error("Erro ao editar cliente:", error);
+      Alert.alert("Erro", "Erro ao editar cliente. Por favor, tente novamente.");
+    }
   };
 
   return (
@@ -88,7 +82,7 @@ const EditClientsModal = ({ show, close, client }) => {
           </View>
           <TouchableOpacity
             style={stylesConfigs.buttonCreated}
-            onPress={handleCreateClient}
+            onPress={() => handleCreateClient()}
           >
             <Text style={stylesConfigs.buttonText}>Salvar Edição</Text>
           </TouchableOpacity>
