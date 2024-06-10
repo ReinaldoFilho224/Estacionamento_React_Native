@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../config';
-import loginStyle from '../../../assets/css/loginStyle'; 
+import loginStyle from '../../../assets/css/loginStyle';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -19,6 +19,21 @@ const LoginScreen = ({ navigation }) => {
       })
       .catch((error) => {
         setError(error.message);
+      });
+  };
+
+  const handlePasswordReset = () => {
+    if (!email) {
+      Alert.alert('Erro', 'Por favor, insira seu email para resetar a senha.');
+      return;
+    }
+
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        Alert.alert('Sucesso', 'Email para resetar a senha enviado com sucesso!');
+      })
+      .catch((error) => {
+        Alert.alert('Erro', error.message);
       });
   };
 
@@ -55,6 +70,9 @@ const LoginScreen = ({ navigation }) => {
         <Text style={loginStyle.buttonText}>ENTRAR</Text>
       </TouchableOpacity>
       {error ? <Text style={loginStyle.errorText}>{error}</Text> : null}
+      <TouchableOpacity onPress={handlePasswordReset}>
+        <Text style={loginStyle.forgotPasswordText}>Esqueceu a senha?</Text>
+      </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
         <Text style={loginStyle.registerText}>Não tem uma conta? Registre-se</Text>
       </TouchableOpacity>

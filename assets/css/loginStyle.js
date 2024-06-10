@@ -62,6 +62,12 @@ const loginStyle = StyleSheet.create({
     color: 'red',
     marginTop: 8,
   },
+  forgotPasswordText: {
+    color: '#fff', // Cor azul ou outra cor de sua escolha
+    marginTop: 10,
+    textAlign: 'center',
+  }
+  
 });
 
 export default loginStyle;
