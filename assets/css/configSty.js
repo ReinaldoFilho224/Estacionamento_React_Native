@@ -24,6 +24,13 @@ export const stylesConfigs = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  buttonCancel: {
+    backgroundColor: "#ff5733",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginTop: 10
+  },
   itens: {
     // flexDirection: 'row',
     // width:'100%',
@@ -139,16 +146,16 @@ export const stylesConfigs = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: "#FFF",
   },
-  sectionTitle:{
-    color:'#fff',
-    textAlign:'center',
-    fontSize:22,
-    marginBottom:15,
+  sectionTitle: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 22,
+    marginBottom: 15,
     // backgroundColor:'gray',
-    width:'100%'
+    width: "100%",
   },
-  section:{
-    borderBottomColor: '#fff',
+  section: {
+    borderBottomColor: "#fff",
     borderBottomWidth: 1,
     marginVertical: 10,
   },

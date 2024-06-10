@@ -84,7 +84,7 @@ const Home = () => {
           ...doc.data(),
         }));
 
-        setVagasOcupadas(parkData.length)
+        setVagasOcupadas(parkData.length);
 
         if (configsData.length > 0) {
           setParkConfigs(configsData[0]);
@@ -111,9 +111,9 @@ const Home = () => {
             style: "currency",
             currency: "BRL",
           })}`}</Text>
-          <Text
-            style={styles.textSmall}
-          >{`Vagas Disponiveis:  ${vagasOcupadas}/${parkConfigs.vagas_dis}`}</Text>
+          <Text style={styles.textSmall}>{`Vagas Disponiveis:  ${
+            parkConfigs.vagas_dis - vagasOcupadas
+          }/${parkConfigs.vagas_dis}`}</Text>
         </View>
         <View>
           <Image
