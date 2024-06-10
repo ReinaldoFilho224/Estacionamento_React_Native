@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, ScrollView, Alert, TouchableOpacity} from "react-native";
+import { View, Text, TextInput, ScrollView, Alert, TouchableOpacity } from "react-native";
 import { collection, getDocs, doc, updateDoc, where, query } from "firebase/firestore";
 import { getAuth, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { db } from "../config";
@@ -47,14 +47,10 @@ const Config = () => {
   }, [user]);
 
   const handleUpdate = async () => {
-    if (!currentPassword) { // Verificar se a senha atual está vazia
-      Alert.alert("Erro", "Por favor, insira sua senha atual.");
-      return;
-    }
+    setIsLoading(true);
 
-    if (configs.id) {
-      setIsLoading(true);
-      try {
+    try {
+      if (configs.id) {
         const configDocRef = doc(db, "configs", configs.id);
         await updateDoc(configDocRef, {
           preco_hora: Number(configs.preco_hora),
@@ -62,13 +58,18 @@ const Config = () => {
         });
 
         const auth = getAuth();
+
         if (displayName && displayName !== user.displayName) {
-          await updateProfile(auth.currentUser, {
-            displayName: displayName,
-          });
+          await updateProfile(auth.currentUser, { displayName: displayName });
         }
 
-        if (currentPassword && newPassword) {
+        if (newPassword) {
+          if (!currentPassword) {
+            Alert.alert("Erro", "Por favor, insira sua senha atual para alterar a senha.");
+            setIsLoading(false);
+            return;
+          }
+
           const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword);
           await reauthenticateWithCredential(auth.currentUser, credential);
           await updatePassword(auth.currentUser, newPassword);
@@ -76,13 +77,14 @@ const Config = () => {
 
         setIsLoading(false);
         Alert.alert("Sucesso", "Configurações atualizadas com sucesso!");
-      } catch (error) {
-        console.error("Erro ao atualizar configurações:", error);
+      } else {
+        Alert.alert("Erro", "Documento de configurações não encontrado.");
         setIsLoading(false);
-        Alert.alert("Erro", "Erro ao atualizar configurações.");
       }
-    } else {
-      Alert.alert("Erro", "Documento de configurações não encontrado.");
+    } catch (error) {
+      console.error("Erro ao atualizar configurações:", error);
+      setIsLoading(false);
+      Alert.alert("Erro", "Erro ao atualizar configurações.");
     }
   };
 
@@ -130,7 +132,9 @@ const Config = () => {
           />
         </View>
       </View>
+
       <View style={stylesConfigs.section}></View>
+
       <View>
         <Text style={stylesConfigs.sectionTitle}>Configurações do Estacionamento</Text>
 
