@@ -3,12 +3,25 @@ import { collection, addDoc, Timestamp, where, query, getDocs } from "firebase/f
 import { db } from '../../config/index'
 import CheckInForm from "./formCheckIn";
 import { useGlobalState } from "../../config/refresh";
+import Toast from "react-native-toast-message";
 
 const CheckInPage = () => {
-  const { refresh, setRefresh, user, parkConfigs } = useGlobalState();
+  const { refresh, setRefresh, user, parkConfigs, setModalVisible } = useGlobalState();
 
-  // console.log(parkConfigs)
+  
   const handleCheckIn = async (formData) => {
+    const showToastCheckinOk = () => {
+      Toast.show({
+        type: 'success',
+        text1: 'Check-In realizado com sucesso!',
+      })
+    };
+    const showToastVeiculoEstacionado = () => {
+      Toast.show({
+        type: 'info',
+        text1: 'Veículo já está no estacionamento',
+      })
+    };
     try {
       const parkQuery = query(
         collection(db, "estacionamento"),
@@ -26,9 +39,10 @@ const CheckInPage = () => {
           preco_hora: parkConfigs.preco_hora,
           status: true
         });
-        alert("Check-In realizado com sucesso!");
+        showToastCheckinOk()
       } else {
-        alert('Veículo já está no estacionamento')
+        setModalVisible(false)
+        showToastVeiculoEstacionado()
       }
 
       const placasQuery = query(
@@ -55,7 +69,10 @@ const CheckInPage = () => {
   };
 
   return (
-    <CheckInForm onCheckIn={handleCheckIn} />
+    <>
+      <CheckInForm onCheckIn={handleCheckIn} />
+      <Toast />
+    </>
   );
 };
 

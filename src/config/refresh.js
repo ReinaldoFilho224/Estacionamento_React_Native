@@ -7,6 +7,7 @@ export const GlobalStateProvider = ({ children, initialUser, setInitialUser }) =
   const [isModalVisible, setModalVisible] = useState(false);
   const [parkConfigs, setParkConfigs] = useState({ preco_hora: 0, vagas_dis: 0 });
   const [ vagasOcup, setVagasOcup] = useState(0);
+  
 
 
   return (
@@ -15,7 +16,7 @@ export const GlobalStateProvider = ({ children, initialUser, setInitialUser }) =
       isModalVisible, setModalVisible,
       parkConfigs, setParkConfigs,
       refresh, setRefresh,
-      vagasOcup, setVagasOcup
+      vagasOcup, setVagasOcup, 
     }}>
       {children}
     </GlobalStateContext.Provider>

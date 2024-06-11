@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../config';
 import loginStyle from '../../../assets/css/loginStyle';
+import Toast from 'react-native-toast-message';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -11,26 +12,51 @@ const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
+  const showToastResetPasswordError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: 'Por favor, insira seu email para resetar a senha.'
+    })
+  };
+  
+  const showToastLoginError = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: 'Email ou senha inválidos'
+    })
+  };
+
+  const showToastResetPassword = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Sucesso',
+      text2: 'Email para resetar a senha enviado com sucesso!'
+    })
+  };
+
   const handleLogin = () => {
+
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log('Usuário logado');
       })
       .catch((error) => {
-        setError(error.message);
+        showToastLoginError()
       });
   };
 
   const handlePasswordReset = () => {
     if (!email) {
-      Alert.alert('Erro', 'Por favor, insira seu email para resetar a senha.');
+      showToastResetPasswordError()
       return;
     }
 
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        Alert.alert('Sucesso', 'Email para resetar a senha enviado com sucesso!');
+        showToastResetPassword()
       })
       .catch((error) => {
         Alert.alert('Erro', error.message);
@@ -39,12 +65,12 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={loginStyle.container}>
-      <Image 
-        source={require('../../../assets/user-icon.png')} 
-        style={loginStyle.logo} 
+      <Image
+        source={require('../../../assets/user-icon.png')}
+        style={loginStyle.logo}
       />
-      <TextInput 
-        style={loginStyle.input} 
+      <TextInput
+        style={loginStyle.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -53,7 +79,7 @@ const LoginScreen = ({ navigation }) => {
       />
       <View style={loginStyle.passwordContainer}>
         <TextInput
-          style={loginStyle.inputPassword} 
+          style={loginStyle.inputPassword}
           placeholder="Senha"
           value={password}
           onChangeText={setPassword}
@@ -76,6 +102,7 @@ const LoginScreen = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
         <Text style={loginStyle.registerText}>Não tem uma conta? Registre-se</Text>
       </TouchableOpacity>
+      <Toast />
     </View>
   );
 };

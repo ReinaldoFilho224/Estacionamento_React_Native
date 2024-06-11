@@ -12,7 +12,7 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
     const [selectedClienteId, setSelectedClienteId] = useState("");
     const [placa, setPlaca] = useState("");
     const [carModel, setCarModel] = useState("");
-    const { refresh, user } = useGlobalState();
+    const { refresh, user, setRefresh } = useGlobalState();
     const [isFormValid, setIsFormValid] = useState(false);
 
     const handlePlacaChange = (text) => {
@@ -75,6 +75,7 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
                 setPlaca('');
                 setCarModel('');
                 setIsFormValid(true)
+                setRefresh(!refresh)
             })
             .catch((error) => {
                 console.error('Erro ao fazer check-in:', error);
@@ -130,7 +131,7 @@ const CheckInForm = ({ onCheckIn, preco_hora }) => {
                     style={isFormValid ? stylesCheckin.button : stylesCheckin.buttonDisabled}
                 >
                     <View>
-                        <Text>Checkin</Text>
+                        <Text style={stylesCheckin.text}>Checkin</Text>
                     </View>
                 </TouchableOpacity>
             </View>

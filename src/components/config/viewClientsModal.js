@@ -17,35 +17,35 @@ const ViewClientsComponent = () => {
   const [filteredClients, setFilteredClients] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [showModalEdit, setShowModalEdit] = useState(false);
-  const [clientSelect, setClientSelected] = useState([]);
+  const [clientSelect, setClientSelected] = useState(null);
   const { user, refresh, setRefresh } = useGlobalState();
 
+  const fetchClients = async () => {
+    try {
+      const clientsQuery = query(
+        collection(db, "clientes"),
+        where("park_id", "==", user.uid)
+      );
+
+      const querySnapshot = await getDocs(clientsQuery);
+      const clientsData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setClients(clientsData);
+      setFilteredClients(clientsData);
+    } catch (error) {
+      console.error("Erro ao buscar carros estacionados:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchDataAndSetTimer = async () => {
-      try {
-        const clientsQuery = query(
-          collection(db, "clientes"),
-          where("park_id", "==", user.uid)
-        );
+    fetchClients();
 
-        const querySnapshot = await getDocs(clientsQuery);
-        const clientsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setClients(clientsData);
-        setFilteredClients(clientsData);
-      } catch (error) {
-        console.error("Erro ao buscar carros estacionados:", error);
-      }
-    };
-
-    fetchDataAndSetTimer();
-
-    const timer = setInterval(fetchDataAndSetTimer, 10000);
+    const timer = setInterval(fetchClients, 10000);
 
     return () => clearInterval(timer);
-  }, [refresh]);
+  }, [refresh, user.uid]);
 
   useEffect(() => {
     const filtered = clients.filter(
@@ -56,21 +56,28 @@ const ViewClientsComponent = () => {
     setFilteredClients(filtered);
   }, [searchText, clients]);
 
+  const handleEditClient = (client) => {
+    setClientSelected(client);
+    setShowModalEdit(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModalEdit(false);
+    setClientSelected(null);
+  };
+
   return (
     <ScrollView style={{ width: "100%" }}>
       <TextInput
         style={stylesConfigs.searchInput}
         placeholder="Filtrar por CPF ou Cliente"
         value={searchText}
-        onChangeText={(text) => setSearchText(text)}
+        onChangeText={setSearchText}
       />
-      {filteredClients.map((client, index) => (
+      {filteredClients.map((client) => (
         <TouchableOpacity
-          onPress={() => {
-            setShowModalEdit(true);
-            setClientSelected(client);
-          }}
-          key={index}
+          onPress={() => handleEditClient(client)}
+          key={client.id}
           style={stylesConfigs.itens}
         >
           <Text>
@@ -88,11 +95,14 @@ const ViewClientsComponent = () => {
         </TouchableOpacity>
       ))}
 
-      <EditClientsModal
-        show={showModalEdit}
-        close={() => setShowModalEdit(false)}
-        client={clientSelect}
-      />
+      {showModalEdit && (
+        <EditClientsModal
+          show={showModalEdit}
+          close={handleCloseModal}
+          client={clientSelect}
+          onRefresh={() => setRefresh((prev) => !prev)}
+        />
+      )}
     </ScrollView>
   );
 };
