@@ -105,15 +105,6 @@ const Config = () => {
         <Text style={stylesConfigs.sectionTitle}>Configurações do Usuário</Text>
 
         <View style={{ display: "flex", gap: 10 }}>
-          <Text style={stylesConfigs.formClientLabel}>Nome de Usuário:</Text>
-          <TextInput
-            style={stylesCheckin.input}
-            value={displayName}
-            onChangeText={(text) => setDisplayName(text)}
-          />
-        </View>
-
-        <View style={{ display: "flex", gap: 10 }}>
           <Text style={stylesConfigs.formClientLabel}>Senha Atual:</Text>
           <TextInput
             style={stylesCheckin.input}
@@ -138,6 +129,15 @@ const Config = () => {
 
       <View>
         <Text style={stylesConfigs.sectionTitle}>Configurações do Estacionamento</Text>
+
+        <View style={{ display: "flex", gap: 10 }}>
+          <Text style={stylesConfigs.formClientLabel}>Nome do Estabelecimento:</Text>
+          <TextInput
+            style={stylesCheckin.input}
+            value={displayName}
+            onChangeText={(text) => setDisplayName(text)}
+          />
+        </View>
 
         <View style={{ display: "flex", gap: 10 }}>
           <Text style={stylesConfigs.formClientLabel}>Preço por Hora:</Text>
