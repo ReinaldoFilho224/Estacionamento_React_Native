@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Alert, TextInput } from 'react-native';
+import { MaskedTextInput } from "react-native-mask-text";
+import { TouchableOpacity } from 'react-native';
 import { collection, addDoc } from 'firebase/firestore';
 import { useGlobalState } from '../../config/refresh';
 import { db } from '../../config';
@@ -27,8 +29,7 @@ const AddClientsComponent = () => {
             setCpf('');
             setNome('');
             setTelefone('');
-            setRefresh(!refresh)
-
+            setRefresh(!refresh);
 
             Alert.alert('Sucesso', 'Cliente criado com sucesso!');
         } catch (error) {
@@ -36,11 +37,13 @@ const AddClientsComponent = () => {
             Alert.alert('Erro', 'Erro ao criar cliente. Por favor, tente novamente.');
         }
     };
+
     return (
         <View style={stylesConfigs.formClientContainer}>
             <View style={stylesConfigs.formInput}>
                 <Text style={stylesConfigs.formClientLabel}>CPF:</Text>
-                <TextInput
+                <MaskedTextInput
+                    mask="999.999.999-99"
                     value={cpf}
                     onChangeText={setCpf}
                     placeholder="000.000.000-00"
@@ -49,7 +52,6 @@ const AddClientsComponent = () => {
                 />
             </View>
             <View style={stylesConfigs.formInput}>
-
                 <Text style={stylesConfigs.formClientLabel}>Nome:</Text>
                 <TextInput
                     value={nome}
@@ -59,9 +61,9 @@ const AddClientsComponent = () => {
                 />
             </View>
             <View style={stylesConfigs.formInput}>
-
                 <Text style={stylesConfigs.formClientLabel}>Telefone:</Text>
-                <TextInput
+                <MaskedTextInput
+                    mask="(99) 99999-9999"
                     value={telefone}
                     onChangeText={setTelefone}
                     placeholder="(00) 00000-0000"
@@ -73,7 +75,7 @@ const AddClientsComponent = () => {
                 <Text style={stylesConfigs.buttonText}>Criar Cliente</Text>
             </TouchableOpacity>
         </View>
-    )
-}
+    );
+};
 
 export default AddClientsComponent;

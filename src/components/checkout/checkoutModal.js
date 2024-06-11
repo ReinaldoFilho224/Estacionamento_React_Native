@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native"
 import { stylesCheckout } from "../../../assets/css/checkout"
 import { db } from "../../config";
 import { useGlobalState } from "../../config/refresh";
+import Toast from "react-native-toast-message";
 
 const ClienteTab = ({ cliente }) => (
   <View style={stylesCheckout.modalTab}>
@@ -35,6 +36,18 @@ const VeiculoTab = ({ veiculo }) => (
 );
 
 export const CheckoutModal = ({ document }) => {
+  const showToastCheckoutOk = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Check-out realizado com sucesso!',
+    })
+  };
+  const showToastCheckoutNotOK = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Erro ao realizar o check-out. Por favor, tente novamente.',
+    })
+  };
   const { refresh, setRefresh } = useGlobalState();
   const {isModalVisible, setModalVisible, user} = useGlobalState();
 
@@ -68,11 +81,12 @@ export const CheckoutModal = ({ document }) => {
 
       // closeModal()
       setModalVisible(false)
+      setRefresh(!refresh)
 
-      alert("Check-out realizado com sucesso!");
+      showToastCheckoutOk()
     } catch (error) {
       console.error("Erro ao realizar o check-out:", error);
-      alert("Erro ao realizar o check-out. Por favor, tente novamente.");
+      showToastCheckoutNotOK()
     }
   }
 
@@ -92,6 +106,7 @@ export const CheckoutModal = ({ document }) => {
           </TouchableOpacity>
         </ScrollView>
       </View>
+      <Toast/>
     </View>
   );
 };

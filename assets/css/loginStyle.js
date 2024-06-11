@@ -20,6 +20,7 @@ const loginStyle = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     paddingLeft: 8,
+    height: 50,
     borderRadius:10,
     backgroundColor: "#FEFAF6"
   },
@@ -32,6 +33,7 @@ const loginStyle = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     marginBottom: 16,
+    height: 50,
   },
   inputPassword: {
     flex: 1,

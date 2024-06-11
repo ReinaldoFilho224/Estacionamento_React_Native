@@ -4,11 +4,10 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
-  Button,
   TouchableHighlight,
   TextInput,
+  Button,
 } from "react-native";
-import { Picker } from '@react-native-picker/picker';
 import { useState, useEffect } from "react";
 import { db } from "../../config";
 import { stylesConfigs } from "../../../assets/css/configSty";
@@ -29,6 +28,7 @@ import {
   getStartOfLast7Days,
   getStartOfSpecificDay,
 } from "../../utils/dateUtils";
+import DatePicker from "@react-native-community/datetimepicker";
 
 const HistoricComponent = () => {
   const [historic, setHistoric] = useState([]);
@@ -38,7 +38,8 @@ const HistoricComponent = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [filter, setFilter] = useState("all");
-  const [searchDate, setSearchDate] = useState("");
+  const [searchDate, setSearchDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filteredHistoric, setFilteredHistoric] = useState([]);
   const [hasFilteredResults, setHasFilteredResults] = useState(true);
@@ -160,9 +161,21 @@ const HistoricComponent = () => {
       </View>
 
       <View style={stylesDetails.filterContainer}>
-        <Button title="Todos" onPress={() => setFilter("all")} />
-        <Button title="Hoje" onPress={() => setFilter("today")} />
-        <Button title="Últimos 7 Dias" onPress={() => setFilter("last7Days")} />
+        <Button title="Selecionar Dia" onPress={() => setShowDatePicker(true)} />
+        <Button title="Limpar Filtro" onPress={() => setFilter("all")} />
+        {showDatePicker && (
+          <DatePicker
+            value={searchDate}
+            mode="date"
+            onChange={(event, selected) => {
+              setShowDatePicker(false);
+              if (event.type === "set") {
+                setSearchDate(selected || searchDate);
+                setFilter("specificDay");
+              }
+            }}
+          />
+        )}
       </View>
 
       {filteredHistoric.length === 0 && hasFilteredResults === false ? (
