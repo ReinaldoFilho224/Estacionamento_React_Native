@@ -56,7 +56,7 @@ export const stylesCheckin = StyleSheet.create({
         justifyContent: 'center', 
     },
     button: {
-        backgroundColor: '#FF5733',
+        backgroundColor: 'green',
         paddingVertical: 12, 
         paddingHorizontal: 20, 
         borderRadius: 8,

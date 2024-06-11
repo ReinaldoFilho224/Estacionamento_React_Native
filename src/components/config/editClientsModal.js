@@ -9,16 +9,16 @@ import {
 } from "react-native";
 import { doc, updateDoc } from "firebase/firestore";  // Importar updateDoc e doc
 import { useGlobalState } from "../../config/refresh";
+import { MaskedTextInput } from "react-native-mask-text";
 import { db } from "../../config";
 import { stylesConfigs } from "../../../assets/css/configSty";
 import { stylesCheckin } from "../../../assets/css/checkin";
-import styled from "styled-components";
 
 const EditClientsModal = ({ show, close, client }) => {
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
-  const {setRefresh, refresh} = useGlobalState()
+  const { setRefresh, refresh } = useGlobalState()
 
   useEffect(() => {
     if (client) {
@@ -30,7 +30,6 @@ const EditClientsModal = ({ show, close, client }) => {
 
   const handleCreateClient = async () => {
     try {
-      // Atualizar o cliente existente no Firestore
       const clientRef = doc(db, "clientes", client.id);
       await updateDoc(clientRef, {
         cpf,
@@ -53,7 +52,8 @@ const EditClientsModal = ({ show, close, client }) => {
         <View style={stylesConfigs.formClientContainer}>
           <View style={stylesConfigs.formInput}>
             <Text style={stylesConfigs.formClientLabel}>CPF:</Text>
-            <TextInput
+            <MaskedTextInput
+              mask="999.999.999-99"
               value={cpf}
               onChangeText={setCpf}
               placeholder="000.000.000-00"
@@ -72,7 +72,8 @@ const EditClientsModal = ({ show, close, client }) => {
           </View>
           <View style={stylesConfigs.formInput}>
             <Text style={stylesConfigs.formClientLabel}>Telefone:</Text>
-            <TextInput
+            <MaskedTextInput
+              mask="(99) 99999-9999"
               value={telefone}
               onChangeText={setTelefone}
               placeholder="(00) 00000-0000"
@@ -86,7 +87,7 @@ const EditClientsModal = ({ show, close, client }) => {
           >
             <Text style={stylesConfigs.buttonText}>Salvar Edição</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={stylesConfigs.buttonCancel} onPress={close}>
+          <TouchableOpacity style={stylesConfigs.buttonCancel} onPress={() => close()}>
             <Text style={stylesConfigs.buttonText}>Cancelar</Text>
           </TouchableOpacity>
         </View>

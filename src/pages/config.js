@@ -75,6 +75,7 @@ const Config = () => {
           await updatePassword(auth.currentUser, newPassword);
         }
 
+        setRefresh(!refresh)
         setIsLoading(false);
         Alert.alert("Sucesso", "Configurações atualizadas com sucesso!");
       } else {

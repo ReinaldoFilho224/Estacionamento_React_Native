@@ -15,13 +15,29 @@ import HistoricComponent from "../components/config/historicModal";
 import Config from "./config";
 import Saldo from "../components/config/saldo";
 import { auth } from "../config";
-import { signOut } from "firebase/auth";
+import { signOut} from "firebase/auth";
+import Toast from "react-native-toast-message";
 
 const Home = () => {
+
+  const showToastCheckinoff = () => {
+    Toast.show({
+      type: 'info',
+      text1: 'Todas as Vagas estão ocupadas',
+    })
+  };
+  const showToastVerifyEmail = () => {
+    Toast.show({
+      type: 'error',
+      text1: 'Verifique seu email, para liberar o aplicativo',
+      text2: 'Você voltará a tela de login em 30 segundos'
+    })
+  };
+
   const [vagasOcupadas, setVagasOcupadas] = useState(0);
   const { isModalVisible, setModalVisible } = useGlobalState();
   const [modalContent, setModalContent] = useState(null);
-  const { refresh, setRefresh, user, setParkConfigs, parkConfigs } =
+  const { refresh, setUser, user, setParkConfigs, parkConfigs } =
     useGlobalState();
 
   const handleModal = (content) => {
@@ -32,7 +48,7 @@ const Home = () => {
   const renderModalContent = () => {
     switch (modalContent) {
       case "checkin":
-        return <CheckInPage />;
+        return <CheckInPage setModalVisible={setModalVisible}/>;
       case "checkout":
         return <ListCheckout setModalVisible={setModalVisible} />;
       case "addClient":
@@ -59,6 +75,28 @@ const Home = () => {
         console.error("Erro ao desconectar:", error);
       });
   };
+
+  useEffect(() => {
+    setModalVisible(false)
+  },[vagasOcupadas])  
+
+
+  useEffect(() => {
+    if (!user.emailVerified) {
+      showToastVerifyEmail()
+      const timeoutId = setTimeout(() => {
+        signOut(auth)
+          .then(() => {
+            console.log("Usuário desconectado após 30 segundos");
+          })
+          .catch((error) => {
+            console.error("Erro ao desconectar:", error);
+          });
+      }, 30000);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchDataAndSetTimer = async () => {
@@ -98,7 +136,8 @@ const Home = () => {
       }
     };
     fetchDataAndSetTimer();
-  }, [refresh]);
+
+    }, [refresh, user]);
 
   return (
     <View style={styles.container}>
@@ -111,9 +150,8 @@ const Home = () => {
             style: "currency",
             currency: "BRL",
           })}`}</Text>
-          <Text style={styles.textSmall}>{`Vagas Disponiveis:  ${
-            parkConfigs.vagas_dis - vagasOcupadas
-          }/${parkConfigs.vagas_dis}`}</Text>
+          <Text style={styles.textSmall}>{`Vagas Disponiveis:  ${parkConfigs.vagas_dis - vagasOcupadas
+            }/${parkConfigs.vagas_dis}`}</Text>
         </View>
         <View>
           <Image
@@ -122,114 +160,134 @@ const Home = () => {
           />
         </View>
       </View>
-      <View style={styles.lines}>
-        <View style={styles.lineMenu}>
-          <View style={styles.menuArea}>
-            <ButtonMenu
-              functionModal={() => handleModal("checkin")}
-              icon="checkmark-circle-outline"
-              iconColor="green"
-              textButton="Realizar Checkin"
-            />
+      {!user.emailVerified
+        ?
+        <View>
+          <Toast />
+          <View style={styles.lineMenu}>
+            <View style={styles.menuArea}>
+              <ButtonMenu
+                functionModal={handleSignOut}
+                icon="log-out-outline"
+                iconColor="red"
+                textButton="Sair"
+              />
+            </View>
+          </View>
+        </View>
+        :
+        <View>
+          <View style={styles.lines}>
+            <View style={styles.lineMenu}>
+              <View style={styles.menuArea}>
+                <ButtonMenu
+                  functionModal={parkConfigs.vagas_dis - vagasOcupadas === 0?() => showToastCheckinoff() :() => handleModal("checkin")}
+                  icon="checkmark-circle-outline"
+                  iconColor="green"
+                  textButton="Realizar Checkin"
+                />
 
-            <ButtonMenu
-              functionModal={() => handleModal("checkout")}
-              icon="remove-circle-outline"
-              iconColor="red"
-              textButton="Realizar Checkout"
-            />
-          </View>
-        </View>
-        <View style={styles.lineMenu}>
-          <View style={styles.menuArea}>
-            <ButtonMenu
-              functionModal={() => handleModal("listClient")}
-              icon="people-outline"
-              iconColor="#102C57"
-              textButton="Lista de Clientes"
-            />
-            <ButtonMenu
-              functionModal={() => handleModal("addClient")}
-              icon="person-add-outline"
-              iconColor="#102C57"
-              textButton="Adicionar Cliente"
-            />
-          </View>
-        </View>
-        <View style={styles.lineMenu}>
-          <View style={styles.menuArea}>
-            <ButtonMenu
-              functionModal={() => handleModal("history")}
-              icon="time-outline"
-              iconColor="#102C57"
-              textButton="Historico"
-            />
-            <ButtonMenu
-              functionModal={() => handleModal("config")}
-              icon="settings-outline"
-              iconColor="#102C57"
-              textButton="Configuração"
-            />
-          </View>
-        </View>
-        <View style={styles.lineMenu}>
-          <View style={styles.menuArea}>
-            <ButtonMenu
-              functionModal={() => handleModal("saldo")}
-              icon="stats-chart-outline"
-              iconColor="orange"
-              textButton="Saldo"
-            />
-            <ButtonMenu
-              functionModal={handleSignOut}
-              icon="log-out-outline"
-              iconColor="red"
-              textButton="Sair"
-            />
-          </View>
-        </View>
-      </View>
-      <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={() => setModalVisible(false)}
-        style={{ justifyContent: "flex-end", margin: 0, height: "100%" }}
-      >
-        <View style={styles.modalContent}>
-          <View style={styles.headerModal}>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Icon name="chevron-back-outline" size={30} color="#fff" />
-            </TouchableOpacity>
-            <Text style={styles.modalHeaderText}>
-              {modalContent === "checkin"
-                ? "Realizar Checkin"
-                : modalContent === "checkout"
-                ? "Realizar Checkout"
-                : modalContent === "listClient"
-                ? "Lista de Clientes"
-                : modalContent === "history"
-                ? "Historico"
-                : modalContent === "config"
-                ? "Configuração"
-                : modalContent === "saldo"
-                ? "Saldo"
-                : "Adicionar Cliente"}
-            </Text>
-            {modalContent === "checkin" ? (
-              <TouchableOpacity onPress={() => handleModal("addClient")}>
-                <Icon name="person-add-outline" size={30} color="#fff" />
-              </TouchableOpacity>
-            ) : modalContent === "config" ? (
-              <View onPress={() => handleModal("addClient")}>
-                <Icon name="settings" size={30} color="#fff" />
+                <ButtonMenu
+                  functionModal={() => handleModal("checkout")}
+                  icon="remove-circle-outline"
+                  iconColor="red"
+                  textButton="Realizar Checkout"
+                />
               </View>
-            ) : (
-              <View></View>
-            )}
+            </View>
+            <View style={styles.lineMenu}>
+              <View style={styles.menuArea}>
+                <ButtonMenu
+                  functionModal={() => handleModal("listClient")}
+                  icon="people-outline"
+                  iconColor="#102C57"
+                  textButton="Lista de Clientes"
+                />
+                <ButtonMenu
+                  functionModal={() => handleModal("addClient")}
+                  icon="person-add-outline"
+                  iconColor="#102C57"
+                  textButton="Adicionar Cliente"
+                />
+              </View>
+            </View>
+            <View style={styles.lineMenu}>
+              <View style={styles.menuArea}>
+                <ButtonMenu
+                  functionModal={() => handleModal("history")}
+                  icon="time-outline"
+                  iconColor="#102C57"
+                  textButton="Historico"
+                />
+                <ButtonMenu
+                  functionModal={() => handleModal("config")}
+                  icon="settings-outline"
+                  iconColor="#102C57"
+                  textButton="Configuração"
+                />
+              </View>
+            </View>
+            <View style={styles.lineMenu}>
+              <View style={styles.menuArea}>
+                <ButtonMenu
+                  functionModal={() => handleModal("saldo")}
+                  icon="stats-chart-outline"
+                  iconColor="orange"
+                  textButton="Saldo"
+                />
+                <ButtonMenu
+                  functionModal={handleSignOut}
+                  icon="log-out-outline"
+                  iconColor="red"
+                  textButton="Sair"
+                />
+              </View>
+            </View>
           </View>
-          {renderModalContent()}
+          <Modal
+            isVisible={isModalVisible}
+            onBackdropPress={() => setModalVisible(false)}
+            style={{ justifyContent: "flex-end", margin: 0, height: "100%" }}
+          >
+            <View style={styles.modalContent}>
+              <View style={styles.headerModal}>
+                <TouchableOpacity onPress={() => setModalVisible(false)}>
+                  <Icon name="chevron-back-outline" size={30} color="#fff" />
+                </TouchableOpacity>
+                <Text style={styles.modalHeaderText}>
+                  {modalContent === "checkin"
+                    ? "Realizar Checkin"
+                    : modalContent === "checkout"
+                      ? "Realizar Checkout"
+                      : modalContent === "listClient"
+                        ? "Lista de Clientes"
+                        : modalContent === "history"
+                          ? "Historico"
+                          : modalContent === "config"
+                            ? "Configuração"
+                            : modalContent === "saldo"
+                              ? "Saldo"
+                              : "Adicionar Cliente"}
+                </Text>
+                {modalContent === "checkin" ? (
+                  <TouchableOpacity onPress={() => handleModal("addClient")}>
+                    <Icon name="person-add-outline" size={30} color="#fff" />
+                  </TouchableOpacity>
+                ) : modalContent === "config" ? (
+                  <View onPress={() => handleModal("addClient")}>
+                    <Icon name="settings" size={30} color="#fff" />
+                  </View>
+                ) : (
+                  <View></View>
+                )}
+              </View>
+              {renderModalContent()}
+            </View>
+          </Modal>
         </View>
-      </Modal>
-    </View>
+      }
+      <Toast/>
+    </View >
   );
 };
 
